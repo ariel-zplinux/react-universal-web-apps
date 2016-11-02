@@ -23,6 +23,8 @@
     "gulp": "gulp",
     "debug": "node-dev --debug app/babel-server.js",
     "server": "node-dev app/babel-server.js",
+    "prepare": "node-dev app/server-prepare.js",
+    "test": "node-dev app/test.js",
     "start": "npm-run-all --parallel gulp server",
     "start:debug": "npm-run-all --parallel gulp debug"
   },
@@ -47,6 +49,7 @@
     "gulp-sourcemaps": "^1.6.0",
     "gulp-util": "^3.0.7",
     "history": "^1.13.0",
+    "mongoose": "",
     "node-dev": "^3.1.0",
     "npm-run-all": "^1.2.12",
     "react": "^0.14.1",

@@ -21,7 +21,9 @@ export class Actions {
     }
 
     loadLatestBillsData(params, domain = '') {
-        const url = `${domain}/api/latest-bills`;
+        // const url = `${domain}/api/latest-bills`;
+        const url = `${domain}/api/clients-per-user-device`;
+
         return axios.get(url);
     }
 

@@ -5,7 +5,9 @@ import axios from 'axios';
 
 import nconf from 'nconf';
 
-import React from 'react'
+import mongoose from 'mongoose';
+
+import React from 'react';
 import {renderToString} from 'react-dom/server';
 import {match, RoutingContext} from 'react-router';
 
@@ -82,10 +84,21 @@ const routeManager = Object.assign({}, baseManager, {
 
     createApiRouter(app) {
         const router = express.Router();
-
+        this.createClientsPerUserDeviceRoute(router);
         this.createLastestBillsRoute(router);
         this.createDetailedBillRoute(router);        
         return router;
+    },
+    createClientsPerUserDeviceRoute(router) {
+        router.get('/clients-per-user-device', (req, res) => {
+            this.retrieveClientsPerUserDevice((err, data) => {
+                if(!err) {
+                    res.json(data);                                    
+                } else {
+                    res.status(500).send(err);
+                }
+            });
+        });
     },
     createLastestBillsRoute(router) {
         router.get('/latest-bills', (req, res) => {
@@ -115,6 +128,45 @@ const routeManager = Object.assign({}, baseManager, {
                 }
             });
         });
+    },
+
+    retrieveClientsPerUserDevice(callback){
+        const db = mongoose.connect("mongodb://localhost/mydb");
+
+        mongoose.connection.on("open", function(){
+            const ClientsPerUserDeviceSchemaJson = {
+                _id: String,
+                value: {} 
+            };
+            // initialize RawData schema and model
+            const ClientsPerUserDeviceSchema = mongoose.Schema(
+                ClientsPerUserDeviceSchemaJson,
+                { collection: "clients_per_user_device" },
+                { skipInit: true}
+            );
+
+            let ClientsPerUserDevice;
+            try {
+                ClientsPerUserDevice = mongoose.model("ClientsPerUserDevice");
+            } catch (err) {
+                ClientsPerUserDevice = mongoose.model("ClientsPerUserDevice", ClientsPerUserDeviceSchema);
+            } 
+                    
+            ClientsPerUserDevice.find({}).exec().then( (doc, err) => {
+                const data = {
+                    items: doc.map(r => r.value)
+                };
+                console.log({
+                    items: doc.map(r => r.value)
+                });
+                console.log(err);
+                mongoose.connection.close();
+                
+                callback(err, data); 
+            })
+        
+        });
+
     },
     retrieveLatestBills(callback) {
         FS.readFile('./app/fixtures/latest-bills.json', 'utf-8', (err, content) => {
