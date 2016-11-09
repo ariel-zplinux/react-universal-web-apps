@@ -21,9 +21,11 @@ export class Actions {
     }
 
     loadLatestBillsData(params, domain = '') {
-        // const url = `${domain}/api/latest-bills`;
+        const url = `${domain}/api/latest-bills`;
+        return axios.get(url);
+    }
+    loadClientsPerUserDeviceData(params, domain = '') {
         const url = `${domain}/api/clients-per-user-device`;
-
         return axios.get(url);
     }
 
@@ -37,6 +39,17 @@ export class Actions {
             throw new Error(err);
         });
     }
+
+    getClientsPerUserDeviceData(params) {
+        this.loadClientsPerUserDevice(params).then((response) => {
+            AppDispatcher.dispatch({
+                type: Consts.LOAD_DATALIST, 
+                data: response.data
+            });
+        }).catch((err) => {
+            throw new Error(err);
+        });
+    }   
 }
 
 export default new Actions();

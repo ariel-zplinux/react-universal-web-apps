@@ -101,24 +101,32 @@ readDictionaryStream.on("data", (data) => {
             // mongoose.connection.close();
         });
 
-        var o = {}; 
-        o.map = function() { 
-            emit(this.device, 1);
-        }       
-        
-        o.reduce = function(device, n) { return Array.sum(n)}
-        o.query  = {};  
-        o.scope = {};
-        o.finalize = function(key, reduced_value) {
-            return {
-                device: key,
-                quantity: reduced_value,
-                id: key
-            }
-        }
-        o.out = 'clients_per_user_device';
-        RawData.mapReduce(o,function (err, data, stats) { 
-            console.log('map reduce took %d ms', stats.processtime)
+
+        const clientPerUserDeviceMapReduce = {
+            map: function() { 
+                emit(this.device, 1);
+            },
+            reduce: function(device, n) { 
+                return Array.sum(n);
+            },
+            scope: {
+                total: lines_ok
+            },
+            finalize: function(key, reduced_value) {
+                return {
+                    device: key,
+                    quantity: ((reduced_value / total) * 100).toFixed(2), // precentage
+                    id: key
+                }
+            },
+            query: {},
+            out: 'clients_per_user_device'
+        };
+        RawData.mapReduce(clientPerUserDeviceMapReduce, (err, data, stats) => { 
+            if (err)
+                console.log(err)
+            else if (stats)
+                console.log('map reduce took %d ms', stats.processtime)
         });
         mongoose.connection.close();
         writeLogStream.end();    
