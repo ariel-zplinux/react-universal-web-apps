@@ -7,9 +7,10 @@ import CompactData from './CompactData';
 import Actions from '../../actions/Actions';
 
 export default class DataList extends React.Component {
-    static loadAction(params, domain) {        
+    static loadAction(params, req, domain) {
+        params.url = req;
         // return Actions.loadLatestBillsData(params, domain);
-        return Actions.loadClientsPerUserDeviceData(params, domain);
+        return Actions.loadData(params, domain);
     }
 
     constructor(props) {
@@ -30,7 +31,8 @@ export default class DataList extends React.Component {
 
     componentDidMount() {
         // Actions.getLatestBillsData(this.props.params);
-        Actions.getClientsPerUserDeviceData(this.props.params);
+        // Actions.getClientsPerUserDeviceData(this.props.params);
+        Actions.getDataList(this.props.params, this.props.route.path);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -51,7 +53,17 @@ export default class DataList extends React.Component {
             }
         }
 
+        // check change of url 
+        if (this.props.route.path !== nextProps.route.path) {
+            result = true;
+        }
+            
         return result;
+    }
+
+    componentDidUpdate() {
+        // update state after shouldComponentUpdate hook
+        Actions.getClientsPerUserDeviceData(this.props.params);
     }
 
     onChange() {

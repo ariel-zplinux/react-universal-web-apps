@@ -24,8 +24,25 @@ export class Actions {
         const url = `${domain}/api/latest-bills`;
         return axios.get(url);
     }
+
+    loadData(params, domain = ''){
+        switch(params.url){
+        case "/clients_per_user_device":
+            return this.loadClientsPerUserDeviceData(params, domain);
+        case "/menu":
+            return this.loadMenuData(params, domain);
+        default:
+            return null;
+        }
+    }
+
     loadClientsPerUserDeviceData(params, domain = '') {
         const url = `${domain}/api/clients-per-user-device`;
+        return axios.get(url);
+    }
+
+    loadMenuData(params, domain = '') {
+        const url = `${domain}/api/menu`;
         return axios.get(url);
     }
 
@@ -41,7 +58,7 @@ export class Actions {
     }
 
     getClientsPerUserDeviceData(params) {
-        this.loadClientsPerUserDevice(params).then((response) => {
+        this.loadClientsPerUserDeviceData(params).then((response) => {
             AppDispatcher.dispatch({
                 type: Consts.LOAD_DATALIST, 
                 data: response.data
@@ -49,7 +66,35 @@ export class Actions {
         }).catch((err) => {
             throw new Error(err);
         });
-    }   
+    }
+
+    getDataList(params, path){
+        switch (path) {
+        case "menu":
+            this.loadMenuData(params).then((response) => {
+                AppDispatcher.dispatch({
+                    type: Consts.LOAD_DATALIST, 
+                    data: response.data
+                });
+            }).catch((err) => {
+                throw new Error(err);
+            });
+            break;
+        case "client_per_user_devices":
+            this.loadClientsPerUserDeviceData(params).then((response) => {
+                AppDispatcher.dispatch({
+                    type: Consts.LOAD_DATALIST, 
+                    data: response.data
+                });
+            }).catch((err) => {
+                throw new Error(err);
+            });
+            break;
+        
+        default:
+        }        
+    }
+
 }
 
 export default new Actions();

@@ -5,14 +5,14 @@ import App from './components/app';
 import NoMatch from './components/common/NoMatch';
 
 import Dashboard from './components/dashboard/Dashboard';
-import LatestBills from './components/bill/LatestBills';
+// import LatestBills from './components/bill/LatestBills';
 import DetailedBill from './components/bill/DetailedBill';
 
 import DataList from './components/data/DataList';
 
 
 import DetailedBillStore from './stores/DetailedBillStore';
-import LatestBillsStore from './stores/LatestBillsStore';
+// import LatestBillsStore from './stores/LatestBillsStore';
 
 import DataStore from './stores/DataStore';
 
@@ -25,11 +25,11 @@ const DetailedBillConnector = ComponentConnectorFactory.connect({
     store: DetailedBillStore
 });
 
-const LatestsBillsConnector = ComponentConnectorFactory.connect({
-    name: 'LatestsBillsConnector',
-    component: LatestBills,
-    store: LatestBillsStore
-});
+// const LatestsBillsConnector = ComponentConnectorFactory.connect({
+//     name: 'LatestsBillsConnector',
+//     component: LatestBills,
+//     store: LatestBillsStore
+// });
 
 const DataListConnector = ComponentConnectorFactory.connect({
     name: 'DataListConnector',
@@ -39,10 +39,11 @@ const DataListConnector = ComponentConnectorFactory.connect({
 
 export default (
     <Route path="/" component={App}>
-        <Route component={Dashboard}>
-            <IndexRoute component={LatestsBillsConnector}/>
-            // <IndexRoute component={DataListConnector}/>
-            <Route path="bill/:id" component={DetailedBillConnector}/>
+        <Route component={Dashboard}>            
+            <IndexRoute component={DataListConnector}/>
+            <Route component={DataListConnector} path="menu"/>            
+            <Route component={DataListConnector} path="clients_per_user_device"/>            
+            <Route path="/:id" component={DetailedBillConnector}/>
         </Route>
         <Route path="*" component={NoMatch}/>
     </Route>

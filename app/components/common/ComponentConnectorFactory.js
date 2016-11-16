@@ -20,8 +20,8 @@ export class ComponentConnectorFactory {
                 };
             }
 
-            static loadAction(params, domain) {
-                return Component.loadAction(params, domain);
+            static loadAction(params, req, domain) {
+                return Component.loadAction(params, req, domain);
             }
 
             constructor(props, context) {

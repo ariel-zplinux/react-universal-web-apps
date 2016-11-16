@@ -23,6 +23,6 @@ export default class CompactData extends React.Component {
     }
 
     calculateLink(data) {
-        return `/bill/${data.id}`;
+        return `${data.id}`;
     }
 }

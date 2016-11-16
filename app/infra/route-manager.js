@@ -29,9 +29,7 @@ const routeManager = Object.assign({}, baseManager, {
     
         router.get('*', (req, res) => {
             match({routes, location: req.originalUrl}, (err, redirectLocation, renderProps) => {
-                const {promises, components} = this.mapComponentsToPromises(
-                    renderProps.components, renderProps.params);
-
+                const {promises, components} = this.mapComponentsToPromises(renderProps.components, renderProps.params, req);
                 Promise.all(promises).then((values) => {
                     const data = this.prepareData(values, components);
                     const html = this.render(renderProps, data);
@@ -49,13 +47,13 @@ const routeManager = Object.assign({}, baseManager, {
         return router;
     },
 
-    mapComponentsToPromises(components, params) {
+    mapComponentsToPromises(components, params, req) {
         const filteredComponents = components.filter((Component) => {
             return (typeof Component.loadAction === 'function');
         });
 
         const promises = filteredComponents.map(function(Component) {
-            return Component.loadAction(params, nconf.get('domain'));                  
+            return Component.loadAction(params, req.originalUrl, nconf.get('domain'));                  
         });
 
         return {promises, components: filteredComponents};
@@ -84,11 +82,25 @@ const routeManager = Object.assign({}, baseManager, {
 
     createApiRouter(app) {
         const router = express.Router();
+        this.createHomePage(router);
         this.createClientsPerUserDeviceRoute(router);
         this.createLastestBillsRoute(router);
-        this.createDetailedBillRoute(router);        
+        this.createDetailedBillRoute(router);
+        this.createMenuRoute(router);        
         return router;
     },
+    createHomePage(router) {
+        router.get('/', (req, res) => {
+            this.retrieveHome((err, data) => {
+                if(!err) {
+                    res.json(data);                                    
+                } else {
+                    res.status(500).send(err);
+                }
+            });
+        });
+    },
+
     createClientsPerUserDeviceRoute(router) {
         router.get('/clients-per-user-device', (req, res) => {
             this.retrieveClientsPerUserDevice((err, data) => {
@@ -100,6 +112,19 @@ const routeManager = Object.assign({}, baseManager, {
             });
         });
     },
+
+    createMenuRoute(router) {
+        router.get('/menu', (req, res) => {
+            this.retrieveMenu((err, data) => {
+                if(!err) {
+                    res.json(data);                                    
+                } else {
+                    res.status(500).send(err);
+                }
+            });
+        });
+    },
+    
     createLastestBillsRoute(router) {
         router.get('/latest-bills', (req, res) => {
             this.retrieveLatestBills((err, data) => {
@@ -129,6 +154,15 @@ const routeManager = Object.assign({}, baseManager, {
             });
         });
     },
+
+    retrieveMenu(callback){
+        const menu = {items: [
+            {device: "Clients Per User Device", id:"/clients_per_user_device", quantity: "123"},
+            {device: "NodeJs Event Loop", id:"/node_event_loop", quantity: "123"}            
+        ]};
+        callback(null, menu);
+    },
+
 
     retrieveClientsPerUserDevice(callback){
         const db = mongoose.connect("mongodb://localhost/mydb");

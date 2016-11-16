@@ -6,7 +6,7 @@ import CompactBill from './CompactBill';
 import Actions from '../../actions/Actions';
 
 export default class LatestBills extends React.Component {
-    static loadAction(params, domain) {
+    static loadAction(params, req, domain) {
         return Actions.loadLatestBillsData(params, domain);
     }
 
