@@ -69,7 +69,7 @@ export class Actions {
     }
 
     getDataList(params, path){
-        switch (path) {
+        switch(path) {
         case "menu":
             this.loadMenuData(params).then((response) => {
                 AppDispatcher.dispatch({
@@ -80,7 +80,7 @@ export class Actions {
                 throw new Error(err);
             });
             break;
-        case "client_per_user_devices":
+        case "clients_per_user_device":
             this.loadClientsPerUserDeviceData(params).then((response) => {
                 AppDispatcher.dispatch({
                     type: Consts.LOAD_DATALIST, 

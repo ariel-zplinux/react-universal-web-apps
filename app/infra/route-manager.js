@@ -157,8 +157,8 @@ const routeManager = Object.assign({}, baseManager, {
 
     retrieveMenu(callback){
         const menu = {items: [
-            {device: "Clients Per User Device", id:"/clients_per_user_device", quantity: "123"},
-            {device: "NodeJs Event Loop", id:"/node_event_loop", quantity: "123"}            
+            {device: "Clients Per User Device", id:"/clients_per_user_device"},
+            {device: "NodeJs Event Loop", id:"/node_event_loop"}            
         ]};
         callback(null, menu);
     },

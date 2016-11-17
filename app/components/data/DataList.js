@@ -63,7 +63,7 @@ export default class DataList extends React.Component {
 
     componentDidUpdate() {
         // update state after shouldComponentUpdate hook
-        Actions.getClientsPerUserDeviceData(this.props.params);
+        Actions.getDataList(this.props.params, this.props.route.path);
     }
 
     onChange() {
