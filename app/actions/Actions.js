@@ -25,11 +25,11 @@ export class Actions {
         return axios.get(url);
     }
 
-    loadData(params, domain = ''){
-        switch(params.url){
-        case "/clients_per_user_device":
+    loadData(params, domain = '') {
+        switch (params.url) {
+        case '/clients_per_user_device' :
             return this.loadClientsPerUserDeviceData(params, domain);
-        case "/menu":
+        case '/menu' :
             return this.loadMenuData(params, domain);
         default:
             return null;
@@ -68,9 +68,9 @@ export class Actions {
         });
     }
 
-    getDataList(params, path){
-        switch(path) {
-        case "menu":
+    getDataList(params, path) {
+        switch (path) {
+        case 'menu':
             this.loadMenuData(params).then((response) => {
                 AppDispatcher.dispatch({
                     type: Consts.LOAD_DATALIST, 
@@ -80,7 +80,7 @@ export class Actions {
                 throw new Error(err);
             });
             break;
-        case "clients_per_user_device":
+        case 'clients_per_user_device':
             this.loadClientsPerUserDeviceData(params).then((response) => {
                 AppDispatcher.dispatch({
                     type: Consts.LOAD_DATALIST, 

@@ -26,7 +26,6 @@ const routeManager = Object.assign({}, baseManager, {
 
     createPageRouter() {
         const router = express.Router();
-    
         router.get('*', (req, res) => {
             match({routes, location: req.originalUrl}, (err, redirectLocation, renderProps) => {
                 const {promises, components} = this.mapComponentsToPromises(renderProps.components, renderProps.params, req);
@@ -51,7 +50,6 @@ const routeManager = Object.assign({}, baseManager, {
         const filteredComponents = components.filter((Component) => {
             return (typeof Component.loadAction === 'function');
         });
-
         const promises = filteredComponents.map(function(Component) {
             return Component.loadAction(params, req.originalUrl, nconf.get('domain'));                  
         });
@@ -82,23 +80,11 @@ const routeManager = Object.assign({}, baseManager, {
 
     createApiRouter(app) {
         const router = express.Router();
-        this.createHomePage(router);
         this.createClientsPerUserDeviceRoute(router);
         this.createLastestBillsRoute(router);
         this.createDetailedBillRoute(router);
         this.createMenuRoute(router);        
         return router;
-    },
-    createHomePage(router) {
-        router.get('/', (req, res) => {
-            this.retrieveHome((err, data) => {
-                if(!err) {
-                    res.json(data);                                    
-                } else {
-                    res.status(500).send(err);
-                }
-            });
-        });
     },
 
     createClientsPerUserDeviceRoute(router) {
@@ -190,10 +176,10 @@ const routeManager = Object.assign({}, baseManager, {
                 const data = {
                     items: doc.map(r => r.value)
                 };
-                console.log({
-                    items: doc.map(r => r.value)
-                });
-                console.log(err);
+                // console.log({
+                //     items: doc.map(r => r.value)
+                // });
+                // console.log(err);
                 mongoose.connection.close();
                 
                 callback(err, data); 

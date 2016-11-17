@@ -8,8 +8,8 @@ import Actions from '../../actions/Actions';
 
 export default class DataList extends React.Component {
     static loadAction(params, req, domain) {
-        params.url = req;
-        // return Actions.loadLatestBillsData(params, domain);
+        // to have menu displayed when root address called
+        params.url = (req === '/') ? '/menu' : req;
         return Actions.loadData(params, domain);
     }
 

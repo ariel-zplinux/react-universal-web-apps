@@ -5,7 +5,7 @@ export default class CompactData extends React.Component {
     render() {
         const data = this.props.data;
         // const amount = `$${data.amount}\%`;
-        const amount = data.quantity ? `${data.quantity}%` : "";
+        const amount = data.quantity ? `${data.quantity}%` : '';
         const link = this.calculateLink(data);
 
         return (
