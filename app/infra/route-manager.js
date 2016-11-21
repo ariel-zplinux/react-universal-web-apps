@@ -211,7 +211,13 @@ const routeManager = Object.assign({}, baseManager, {
                 _id: String,
                 value: String
             });
-            const FileData = mongoose.model("FileData", fileDataSchema);
+            let FileData;
+            try {
+                FileData = mongoose.model("FileData");
+            } catch (err) {
+                FileData = mongoose.model("FileData", fileDataSchema);
+            } 
+
             FileData.findOne({_id: id}).exec().then( (doc, err) => {
                 const data = {
                     items: doc.value
