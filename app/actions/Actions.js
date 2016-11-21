@@ -20,6 +20,22 @@ export class Actions {
         });
     }
 
+    loadDetailedData(params, domain = '') {
+        const url = `${domain}/api/data/${params.id}`;
+        return axios.get(url);
+    }
+
+    getDetailedData(params) {
+        this.loadDetailedData(params).then((response) => {
+            AppDispatcher.dispatch({
+                type: Consts.LOAD_DETAILED_DATA, 
+                data: response.data
+            });
+        }).catch((err) => {
+            throw new Error(err);
+        });
+    }
+
     loadLatestBillsData(params, domain = '') {
         const url = `${domain}/api/latest-bills`;
         return axios.get(url);

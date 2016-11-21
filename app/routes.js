@@ -9,12 +9,14 @@ import Dashboard from './components/dashboard/Dashboard';
 import DetailedBill from './components/bill/DetailedBill';
 
 import DataList from './components/data/DataList';
+import DetailedData from './components/data/DetailedData';
 
 
 import DetailedBillStore from './stores/DetailedBillStore';
 // import LatestBillsStore from './stores/LatestBillsStore';
 
 import DataStore from './stores/DataStore';
+import DetailedDataStore from './stores/DetailedDataStore';
 
 
 import ComponentConnectorFactory from './components/common/ComponentConnectorFactory';
@@ -37,6 +39,12 @@ const DataListConnector = ComponentConnectorFactory.connect({
     store: DataStore
 });
 
+const DetailedDataConnector = ComponentConnectorFactory.connect({
+    name: 'DetailedDataConnector',
+    component: DetailedData,
+    store: DetailedDataStore
+});
+
 export default (
     <Route path="/" component={App}>
         <Route component={Dashboard}>            
@@ -44,6 +52,7 @@ export default (
             <Route component={DataListConnector} path="menu"/>            
             <Route component={DataListConnector} path="clients_per_user_device"/>            
             <Route path="/:id" component={DetailedBillConnector}/>
+            <Route path="/data/:id" component={DetailedDataConnector}/>
         </Route>
         <Route path="*" component={NoMatch}/>
     </Route>

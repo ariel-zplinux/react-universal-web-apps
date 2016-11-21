@@ -17,18 +17,19 @@ let lines_ok=0, lines_ko=0;
 // Read and save nodejs event loop explanation file
 readNodeJsEventLoopStream.on("data", (data) => {
     const fileDataSchema = mongoose.Schema({
+        _id: String,
         value: String
     });
     const FileData = mongoose.model("FileData", fileDataSchema);
     const f = new FileData();
-    f.value = data.toString();
-    
+    f.value = data;
+    f._id = "nodejs_event_loop";
     f.save( (err) => {
         if (err){
             console.log("ERR: "+err)        
         }
         else
-            console.log("SUCCESS");
+            console.log("SUCCESS - NodeJs Event Loop explanations added");
     });
 });
 

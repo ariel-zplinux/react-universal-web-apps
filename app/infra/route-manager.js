@@ -81,9 +81,11 @@ const routeManager = Object.assign({}, baseManager, {
     createApiRouter(app) {
         const router = express.Router();
         this.createClientsPerUserDeviceRoute(router);
+        this.createMenuRoute(router);        
+        this.createDataRoute(router);        
+
         this.createLastestBillsRoute(router);
         this.createDetailedBillRoute(router);
-        this.createMenuRoute(router);        
         return router;
     },
 
@@ -141,14 +143,28 @@ const routeManager = Object.assign({}, baseManager, {
         });
     },
 
+    createDataRoute(router) {
+        router.get('/data/:id', (req, res) => {
+            const id = req.params.id;
+
+            this.retrieveData(id, (err, data) => {
+                console.log(data);
+                if(!err) {
+                    res.json(data);                                    
+                } else {
+                    res.status(500).send(err);
+                }
+            });
+        });
+    },
+
     retrieveMenu(callback){
         const menu = {items: [
             {device: "Clients Per User Device", id:"/clients_per_user_device"},
-            {device: "NodeJs Event Loop", id:"/node_event_loop"}            
+            {device: "NodeJs Event Loop", id:"/data/nodejs_event_loop"}            
         ]};
         callback(null, menu);
     },
-
 
     retrieveClientsPerUserDevice(callback){
         const db = mongoose.connect("mongodb://localhost/mydb");
@@ -186,8 +202,27 @@ const routeManager = Object.assign({}, baseManager, {
             })
         
         });
+    },
+    retrieveData(id, callback){
+        const db = mongoose.connect("mongodb://localhost/mydb");
+
+        mongoose.connection.on("open", function(){
+            const fileDataSchema = mongoose.Schema({
+                _id: String,
+                value: String
+            });
+            const FileData = mongoose.model("FileData", fileDataSchema);
+            FileData.findOne({_id: id}).exec().then( (doc, err) => {
+                const data = {
+                    items: doc.value
+                };
+                mongoose.connection.close();
+                callback(err, data); 
+            })  
+        });
 
     },
+    
     retrieveLatestBills(callback) {
         FS.readFile('./app/fixtures/latest-bills.json', 'utf-8', (err, content) => {
             callback(err, JSON.parse(content));
