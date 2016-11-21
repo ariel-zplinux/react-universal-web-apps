@@ -1,15 +1,36 @@
 const {createReadStream, createWriteStream} = require('fs');
 // const _ = require('lodash');
 
+// open db connection
 const mongoose = require('mongoose');
 const db = mongoose.connect("mongodb://localhost/mydb");
 
-const readDictionaryStream =  createReadStream("app/fixtures/session_dictionary.txt")
+const readDictionaryStream =  createReadStream("app/fixtures/session_dictionary.txt");
 const readSessionStream = createReadStream("app/fixtures/airbnb_session_data.txt");
+const readNodeJsEventLoopStream =  createReadStream("app/fixtures/nodejs_event_loop.txt");
 const writeLogStream = createWriteStream("app/log/log.txt");
 // const readSessionStream = createReadStream("app/fixtures/session_data.txt");
 
 let lines_ok=0, lines_ko=0;
+
+
+// Read and save nodejs event loop explanation file
+readNodeJsEventLoopStream.on("data", (data) => {
+    const fileDataSchema = mongoose.Schema({
+        value: String
+    });
+    const FileData = mongoose.model("FileData", fileDataSchema);
+    const f = new FileData();
+    f.value = data.toString();
+    
+    f.save( (err) => {
+        if (err){
+            console.log("ERR: "+err)        
+        }
+        else
+            console.log("SUCCESS");
+    });
+});
 
 
 // Read dictionary to initialize collection
@@ -17,12 +38,12 @@ readDictionaryStream.on("data", (data) => {
     data = data.toString();
     console.log("read dictionary");
     const dictionary = data.split('|');
-    const rawDataSchemaJson = {}
+    const rawDataSchemaJson = {};
     dictionary.map( (word) => {
         rawDataSchemaJson[word] = {
             type: String,
             required: true,
-        }
+        };
     }); 
     
     // to ensure the line is relevant (required) and unique (index-uniaue)
@@ -38,7 +59,7 @@ readDictionaryStream.on("data", (data) => {
 
     // initialize RawData schema and model
     const rawDataSchema = mongoose.Schema(rawDataSchemaJson);
-    const RawData = mongoose.model("RawData", rawDataSchema)
+    const RawData = mongoose.model("RawData", rawDataSchema);
 
 
     // to handle first and last line of stream edge cases (no full line)
@@ -128,6 +149,8 @@ readDictionaryStream.on("data", (data) => {
             else if (stats)
                 console.log('map reduce took %d ms', stats.processtime)
         });
+
+        // close db connection and writeStream
         mongoose.connection.close();
         writeLogStream.end();    
     });
