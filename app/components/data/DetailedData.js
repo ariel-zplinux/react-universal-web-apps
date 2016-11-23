@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {Link} from 'react-router';
+import ReactMarkdown from 'react-markdown';
 
 import Actions from '../../actions/Actions';
 
@@ -50,7 +51,9 @@ export default class DetailedData extends React.Component {
                     <Link className="link" to={this.context.root}>&#171; Home</Link>
                 </header>
                 <section className="section-content">
-                    <div><span>{this.state.items}</span></div>
+                    <div>
+                        <ReactMarkdown source={this.state.items} />
+                    </div>
                 </section>
             </section>
         );

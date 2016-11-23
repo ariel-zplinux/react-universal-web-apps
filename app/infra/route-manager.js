@@ -148,7 +148,6 @@ const routeManager = Object.assign({}, baseManager, {
             const id = req.params.id;
 
             this.retrieveData(id, (err, data) => {
-                console.log(data);
                 if(!err) {
                     res.json(data);                                    
                 } else {

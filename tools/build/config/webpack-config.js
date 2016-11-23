@@ -50,7 +50,11 @@ var webpackConfig = {
                     compact: false,
                     cacheDirectory: true
                 }
-            }
+            },
+            {
+            test: /\.json$/,
+            loader: 'json'
+            } 
         ]        
     },
     externals: {
@@ -64,5 +68,4 @@ var webpackConfig = {
         new webpack.NoErrorsPlugin()
     ]
 };
-
 module.exports = webpackConfig;
