@@ -104,7 +104,7 @@ readDictionaryStream.on("data", (data) => {
                 r.device = r.dim_device_app_combo.replace(/(.*) -.*/g,'$1');
                 r.save( (err) => {
                     if (err){
-                        writeLogStream.write("[error] id_session: "+r.id_session+" err: "+err.message+"\n");
+                        // writeLogStream.write("[error] id_session: "+r.id_session+" err: "+err.message+"\n");
                         lines_ko++;
                     }
                     else
@@ -145,6 +145,30 @@ readDictionaryStream.on("data", (data) => {
             out: 'clients_per_user_device'
         };
         RawData.mapReduce(clientPerUserDeviceMapReduce, (err, data, stats) => { 
+            if (err)
+                console.log(err)
+            else if (stats)
+                console.log('map reduce took %d ms', stats.processtime)
+        });
+
+
+        const clientPerUserAgentMapReduce = {
+            map: function() { 
+                emit(this.dim_user_agent, 1)
+            },
+            reduce: function(device, n) {
+                return Array.sum(n);
+            },
+            scope: {
+                total: lines_ok
+            },
+            finalize: function(key, reduced_value) {
+                return reduced_value;
+            },
+            query: {},
+            out: 'clients_per_user_agent'
+        };
+        RawData.mapReduce(clientPerUserAgentMapReduce, (err, data, stats) => { 
             if (err)
                 console.log(err)
             else if (stats)
