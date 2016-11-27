@@ -120,10 +120,13 @@ readDictionaryStream.on("data", (data) => {
             console.log("the end: "+r);
             console.log("verif lines ok: "+lines_ok);
             console.log("verif: lines ko: "+lines_ko);
-            // mongoose.connection.close();
         });
 
+        // remove first document that contains field names
+        RawData.find({device: "dim_device_app_combo"}).remove().exec();
 
+
+        // Aggregation functions to extract relevant data
         const clientPerUserDeviceMapReduce = {
             map: function() { 
                 emit(this.device, 1);
@@ -136,19 +139,18 @@ readDictionaryStream.on("data", (data) => {
             },
             finalize: function(key, reduced_value) {
                 return {
-                    device: key,
-                    quantity: ((reduced_value / total) * 100).toFixed(2), // precentage
-                    id: key
-                }
+                    name: key,
+                    link: key,                    
+                    value:((reduced_value / total) * 100).toFixed(2) // precentage
+                };
             },
-            query: {},
             out: 'clients_per_user_device'
         };
         RawData.mapReduce(clientPerUserDeviceMapReduce, (err, data, stats) => { 
             if (err)
                 console.log(err)
             else if (stats)
-                console.log('map reduce took %d ms', stats.processtime)
+                console.log('"Clients per device" map reduce took %d ms', stats.processtime)
         });
 
 
@@ -159,20 +161,48 @@ readDictionaryStream.on("data", (data) => {
             reduce: function(device, n) {
                 return Array.sum(n);
             },
-            scope: {
-                total: lines_ok
-            },
             finalize: function(key, reduced_value) {
-                return reduced_value;
+                return {
+                    name: key,
+                    link: key,
+                    value: reduced_value
+                };
             },
-            query: {},
             out: 'clients_per_user_agent'
         };
+
         RawData.mapReduce(clientPerUserAgentMapReduce, (err, data, stats) => { 
             if (err)
                 console.log(err)
             else if (stats)
-                console.log('map reduce took %d ms', stats.processtime)
+                console.log('"Clients per user-agent" map reduce took %d ms', stats.processtime)
+        });
+
+        const UserSessionDurationMapReduce = {
+            map: function() {
+                // calculate session duration
+                var duration = new Date(this.ts_max) - new Date(this.ts_min); 
+                emit(this.device, duration)
+            },
+            reduce: function(device, n) {
+                // reduce to sum of duration per device
+                return Array.sum(n);
+            },
+            finalize: function(key, reduced_value) {
+                return {
+                    name: key,
+                    link: key,                    
+                    value: reduced_value
+                };
+            },
+            out: 'duration_per_user_device'
+        };
+
+        RawData.mapReduce(UserSessionDurationMapReduce, (err, data, stats) => { 
+            if (err)
+                console.log(err)
+            else if (stats)
+                console.log('"Duration per device" map reduce took %d ms', stats.processtime)
         });
 
         // close db connection and writeStream

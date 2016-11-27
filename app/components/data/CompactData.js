@@ -5,14 +5,14 @@ export default class CompactData extends React.Component {
     render() {
         const data = this.props.data;
         // const amount = `$${data.amount}\%`;
-        const amount = data.quantity ? `${data.quantity}%` : '';
+        const amount = data.value ? `${data.value}%` : '';
         const link = this.calculateLink(data);
 
         return (
             <div className="bill compact-bill">
                 <img className="icon" src={data.icon}/>
                 <div className="info-container">
-                    <h4 className="title">{data.device}</h4>
+                    <h4 className="title">{data.name}</h4>
                     <Link className="link" to={link}>
                         More Details &#187;
                     </Link>
@@ -27,6 +27,6 @@ export default class CompactData extends React.Component {
     }
 
     calculateLink(data) {
-        return `${data.id}`;
+        return `${data.link}`;
     }
 }
