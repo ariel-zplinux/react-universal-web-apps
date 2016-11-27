@@ -52,6 +52,7 @@ export default class DetailedData extends React.Component {
                 </header>
                 <section className="section-content">
                     <div>
+                        <br/>
                         <ReactMarkdown source={this.state.items} />
                     </div>
                 </section>

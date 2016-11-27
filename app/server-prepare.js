@@ -140,8 +140,7 @@ readDictionaryStream.on("data", (data) => {
             finalize: function(key, reduced_value) {
                 return {
                     name: key,
-                    link: key,                    
-                    value:((reduced_value / total) * 100).toFixed(2) // precentage
+                    value:""+((reduced_value / total) * 100).toFixed(2)+"%" // precentage
                 };
             },
             out: 'clients_per_user_device'
@@ -164,7 +163,6 @@ readDictionaryStream.on("data", (data) => {
             finalize: function(key, reduced_value) {
                 return {
                     name: key,
-                    link: key,
                     value: reduced_value
                 };
             },
@@ -189,10 +187,18 @@ readDictionaryStream.on("data", (data) => {
                 return Array.sum(n);
             },
             finalize: function(key, reduced_value) {
+                var days = Math.floor( reduced_value / ( 3600 * 24 * 1000) );
+                days = days > 1 ? days+"d" : "";   
+                var hours = new Date(reduced_value).getHours();
+                hours = hours ? hours + "h" : "";
+                var minutes = new Date(reduced_value).getMinutes(); 
+                minutes = minutes ?  minutes+ "m" : ""; 
+                var seconds = new Date(reduced_value).getSeconds();
+                seconds = seconds ? seconds + "s" : "";
+                var duration = days + hours + minutes + seconds;
                 return {
                     name: key,
-                    link: key,                    
-                    value: reduced_value
+                    value: duration
                 };
             },
             out: 'duration_per_user_device'

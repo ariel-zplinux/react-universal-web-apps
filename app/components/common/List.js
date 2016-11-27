@@ -12,7 +12,7 @@ export default class List extends React.Component {
     createItemsMarkup(items, Type) {
         const markupItems = items.map((item) => {            
             return (
-                <li className="ui-list-item" key={item.id}>
+                <li className="ui-list-item" key={item.name}>
                     <Type data={item}/>
                 </li>
             );

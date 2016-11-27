@@ -57,6 +57,11 @@ export class Actions {
         return axios.get(url);
     }
 
+    loadDurationPerUserDeviceData(params, domain = '') {
+        const url = `${domain}/api/duration-per-user-device`;
+        return axios.get(url);
+    }
+
     loadMenuData(params, domain = '') {
         const url = `${domain}/api/menu`;
         return axios.get(url);
@@ -106,7 +111,16 @@ export class Actions {
                 throw new Error(err);
             });
             break;
-        
+        case 'duration_per_user_device':
+            this.loadDurationPerUserDeviceData(params).then((response) => {
+                AppDispatcher.dispatch({
+                    type: Consts.LOAD_DATALIST, 
+                    data: response.data
+                });
+            }).catch((err) => {
+                throw new Error(err);
+            });
+            break;
         default:
         }        
     }

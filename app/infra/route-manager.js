@@ -81,6 +81,7 @@ const routeManager = Object.assign({}, baseManager, {
     createApiRouter(app) {
         const router = express.Router();
         this.createClientsPerUserDeviceRoute(router);
+        this.createDurationPerUserDeviceRoute(router);
         this.createMenuRoute(router);        
         this.createDataRoute(router);        
 
@@ -100,6 +101,18 @@ const routeManager = Object.assign({}, baseManager, {
             });
         });
     },
+
+    createDurationPerUserDeviceRoute(router) {
+        router.get('/duration-per-user-device', (req, res) => {
+            this.retrieveDurationPerUserDevice((err, data) => {
+                if(!err) {
+                    res.json(data);                                    
+                } else {
+                    res.status(500).send(err);
+                }
+            });
+        });
+    },    
 
     createMenuRoute(router) {
         router.get('/menu', (req, res) => {
@@ -193,17 +206,44 @@ const routeManager = Object.assign({}, baseManager, {
                 const data = {
                     items: doc.map(r => r.value)
                 };
-                // console.log({
-                //     items: doc.map(r => r.value)
-                // });
-                // console.log(err);
                 mongoose.connection.close();
-                
                 callback(err, data); 
             })
-        
         });
     },
+
+    retrieveDurationPerUserDevice(callback){
+        const db = mongoose.connect("mongodb://localhost/mydb");
+
+        mongoose.connection.on("open", function(){
+            const DurationPerUserDeviceSchemaJson = {
+                _id: String,
+                value: {} 
+            };
+            // initialize RawData schema and model
+            const DurationPerUserDeviceSchema = mongoose.Schema(
+                DurationPerUserDeviceSchemaJson,
+                { collection: "duration_per_user_device" },
+                { skipInit: true}
+            );
+
+            let DurationPerUserDevice;
+            try {
+                DurationPerUserDevice = mongoose.model("DurationPerUserDevice");
+            } catch (err) {
+                DurationPerUserDevice = mongoose.model("DurationPerUserDevice", DurationPerUserDeviceSchema);
+            } 
+                    
+            DurationPerUserDevice.find({}).exec().then( (doc, err) => {
+                const data = {
+                    items: doc.map(r => r.value)
+                };
+                mongoose.connection.close();
+                callback(err, data); 
+            })
+        });
+    },
+
     retrieveData(id, callback){
         const db = mongoose.connect("mongodb://localhost/mydb");
 
