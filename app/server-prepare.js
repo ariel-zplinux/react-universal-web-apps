@@ -179,7 +179,7 @@ readDictionaryStream.on("data", (data) => {
         const UserSessionDurationMapReduce = {
             map: function() {
                 // calculate session duration
-                var duration = new Date(this.ts_max) - new Date(this.ts_min); 
+                var duration = new ISODate(this.ts_max) - new ISODate(this.ts_min);
                 emit(this.device, duration)
             },
             reduce: function(device, n) {
