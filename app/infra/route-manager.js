@@ -81,6 +81,7 @@ const routeManager = Object.assign({}, baseManager, {
     createApiRouter(app) {
         const router = express.Router();
         this.createClientsPerUserDeviceRoute(router);
+        this.createClientsPerUserAgentRoute(router);
         this.createDurationPerUserDeviceRoute(router);
         this.createMenuRoute(router);        
         this.createDataRoute(router);        
@@ -101,6 +102,18 @@ const routeManager = Object.assign({}, baseManager, {
             });
         });
     },
+    
+    createClientsPerUserAgentRoute(router) {
+        router.get('/clients-per-user-agent', (req, res) => {
+            this.retrieveClientsPerUserAgent((err, data) => {
+                if(!err) {
+                    res.json(data);                                    
+                } else {
+                    res.status(500).send(err);
+                }
+            });
+        });
+    },    
 
     createDurationPerUserDeviceRoute(router) {
         router.get('/duration-per-user-device', (req, res) => {
@@ -203,6 +216,38 @@ const routeManager = Object.assign({}, baseManager, {
             } 
                     
             ClientsPerUserDevice.find({}).exec().then( (doc, err) => {
+                const data = {
+                    items: doc.map(r => r.value)
+                };
+                mongoose.connection.close();
+                callback(err, data); 
+            })
+        });
+    },
+
+    retrieveClientsPerUserAgent(callback){
+        const db = mongoose.connect("mongodb://localhost/mydb");
+
+        mongoose.connection.on("open", function(){
+            const ClientsPerUserAgentSchemaJson = {
+                _id: String,
+                value: {} 
+            };
+            // initialize RawData schema and model
+            const ClientsPerUserAgentSchema = mongoose.Schema(
+                ClientsPerUserAgentSchemaJson,
+                { collection: "clients_per_user_agent" },
+                { skipInit: true}
+            );
+
+            let ClientsPerUserAgent;
+            try {
+                ClientsPerUserAgent = mongoose.model("ClientsPerUserAgent");
+            } catch (err) {
+                ClientsPerUserAgent = mongoose.model("ClientsPerUserAgent", ClientsPerUserAgentSchema);
+            } 
+                    
+            ClientsPerUserAgent.find({}).sort({'value.value': -1}).limit(30).exec().then( (doc, err) => {
                 const data = {
                     items: doc.map(r => r.value)
                 };

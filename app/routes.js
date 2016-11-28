@@ -52,6 +52,7 @@ export default (
             <Route component={DataListConnector} path="menu"/>            
             <Route component={DataListConnector} path="clients_per_user_device"/>            
             <Route component={DataListConnector} path="duration_per_user_device"/>            
+            <Route component={DataListConnector} path="clients_per_user_agent"/>            
             <Route path="/:id" component={DetailedBillConnector}/>
             <Route path="/data/:id" component={DetailedDataConnector}/>
         </Route>

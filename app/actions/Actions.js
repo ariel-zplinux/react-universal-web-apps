@@ -57,6 +57,11 @@ export class Actions {
         return axios.get(url);
     }
 
+    loadClientsPerUserAgentData(params, domain = '') {
+        const url = `${domain}/api/clients-per-user-agent`;
+        return axios.get(url);
+    }
+
     loadDurationPerUserDeviceData(params, domain = '') {
         const url = `${domain}/api/duration-per-user-device`;
         return axios.get(url);
@@ -103,6 +108,16 @@ export class Actions {
             break;
         case 'clients_per_user_device':
             this.loadClientsPerUserDeviceData(params).then((response) => {
+                AppDispatcher.dispatch({
+                    type: Consts.LOAD_DATALIST, 
+                    data: response.data
+                });
+            }).catch((err) => {
+                throw new Error(err);
+            });
+            break;
+        case 'clients_per_user_agent':
+            this.loadClientsPerUserAgentData(params).then((response) => {
                 AppDispatcher.dispatch({
                     type: Consts.LOAD_DATALIST, 
                     data: response.data
