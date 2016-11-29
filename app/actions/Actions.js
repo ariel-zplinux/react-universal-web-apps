@@ -45,6 +45,10 @@ export class Actions {
         switch (params.url) {
         case '/clients_per_user_device' :
             return this.loadClientsPerUserDeviceData(params, domain);
+        case '/duration_per_user_device' :
+            return this.loadDurationPerUserDeviceData(params, domain);
+        case '/clients_per_user_agent' :
+            return this.loadClientsPerUserAgentData(params, domain);
         case '/menu' :
             return this.loadMenuData(params, domain);
         default:
@@ -59,7 +63,7 @@ export class Actions {
 
     loadClientsPerUserAgentData(params, domain = '') {
         const url = `${domain}/api/clients-per-user-agent`;
-        return axios.get(url);
+        return axios.get(url, {params});
     }
 
     loadDurationPerUserDeviceData(params, domain = '') {

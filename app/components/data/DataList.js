@@ -4,6 +4,7 @@ import List from '../common/List';
 // import CompactBill from './CompactBill';
 import CompactData from './CompactData';
 
+import ReactPaginate from 'react-paginate';
 import Actions from '../../actions/Actions';
 
 export default class DataList extends React.Component {
@@ -11,6 +12,13 @@ export default class DataList extends React.Component {
         // to have menu displayed when root address called
         params.url = (req === '/') ? '/menu' : req;
         return Actions.loadData(params, domain);
+    }
+
+
+    handlePageClick(data) {
+        let selected = data.selected;
+        let offset = Math.ceil(selected * this.props.route.perPage);
+        this.setState({offset});
     }
 
     constructor(props) {
@@ -44,7 +52,7 @@ export default class DataList extends React.Component {
 
             if (oldItems.length === newItems.length) {
                 const validList = newItems.filter((item, index) => {
-                    return oldItems[index].id !== item.id;
+                    return oldItems[index].name !== item.name;
                 });
 
                 if (validList.length === 0) {
@@ -57,13 +65,22 @@ export default class DataList extends React.Component {
         if (this.props.route.path !== nextProps.route.path) {
             result = true;
         }
+
+        // check change of offset
+        if (this.state.offset !== nextState.offset) {
+            result = true;
+        }
             
         return result;
     }
 
     componentDidUpdate() {
         // update state after shouldComponentUpdate hook
-        Actions.getDataList(this.props.params, this.props.route.path);
+        let params = {
+            limit: this.props.route.perPage,
+            offset: this.state.offset
+        };
+        Actions.getDataList(params, this.props.route.path);
     }
 
     onChange() {
@@ -72,6 +89,7 @@ export default class DataList extends React.Component {
     }
 
     render() {
+        let paginate = this.props.route.paginate;
         return (
             <section className="latest-bills">
                 <header className="section-header">
@@ -79,6 +97,23 @@ export default class DataList extends React.Component {
                 </header>
                 <section className="section-content">
                     <List items={this.state.items} itemType={CompactData}/>
+                    { paginate ?
+                        <div id="react-paginate">
+                            <ReactPaginate previousLabel={"previous"}
+                                nextLabel={"next"}
+                                breakLabel={<a href="">...</a>}
+                                breakClassName={"break-me"}
+                                pageNum={this.state.pageNum}
+                                marginPagesDisplayed={2}
+                                pageRangeDisplayed={5}
+                                clickCallback={this.handlePageClick.bind(this)}
+                                containerClassName={"pagination"}
+                                subContainerClassName={"pages pagination"}
+                                activeClassName={"active"} />
+                        </div>
+                        :
+                        ''
+                    }
                 </section>
             </section>
         );

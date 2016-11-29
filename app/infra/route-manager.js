@@ -105,7 +105,7 @@ const routeManager = Object.assign({}, baseManager, {
     
     createClientsPerUserAgentRoute(router) {
         router.get('/clients-per-user-agent', (req, res) => {
-            this.retrieveClientsPerUserAgent((err, data) => {
+            this.retrieveClientsPerUserAgent(req.query, (err, data) => {
                 if(!err) {
                     res.json(data);                                    
                 } else {
@@ -225,9 +225,9 @@ const routeManager = Object.assign({}, baseManager, {
         });
     },
 
-    retrieveClientsPerUserAgent(callback){
+    retrieveClientsPerUserAgent(params, callback){
         const db = mongoose.connect("mongodb://localhost/mydb");
-
+        let {limit,offset} = params;
         mongoose.connection.on("open", function(){
             const ClientsPerUserAgentSchemaJson = {
                 _id: String,
@@ -247,7 +247,7 @@ const routeManager = Object.assign({}, baseManager, {
                 ClientsPerUserAgent = mongoose.model("ClientsPerUserAgent", ClientsPerUserAgentSchema);
             } 
                     
-            ClientsPerUserAgent.find({}).sort({'value.value': -1}).limit(30).exec().then( (doc, err) => {
+            ClientsPerUserAgent.find({}).sort({'value.value': -1}).skip(offset).limit(limit || 10).exec().then( (doc, err) => {
                 const data = {
                     items: doc.map(r => r.value)
                 };
