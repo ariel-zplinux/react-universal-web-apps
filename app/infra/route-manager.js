@@ -247,7 +247,7 @@ const routeManager = Object.assign({}, baseManager, {
                 ClientsPerUserAgent = mongoose.model("ClientsPerUserAgent", ClientsPerUserAgentSchema);
             } 
                     
-            ClientsPerUserAgent.find({}).sort({'value.value': -1}).skip(offset).limit(limit || 10).exec().then( (doc, err) => {
+            ClientsPerUserAgent.find({}).sort({'value.value': -1}).skip(offset).limit(limit || 6).exec().then( (doc, err) => {
                 const data = {
                     items: doc.map(r => r.value)
                 };

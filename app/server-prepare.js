@@ -7,11 +7,17 @@ const db = mongoose.connect("mongodb://localhost/mydb");
 
 const readDictionaryStream =  createReadStream("app/fixtures/session_dictionary.txt");
 const readSessionStream = createReadStream("app/fixtures/airbnb_session_data.txt");
-const readNodeJsEventLoopStream =  createReadStream("app/fixtures/nodejs_event_loop.txt");
+// const readNodeJsEventLoopStream =  createReadStream("app/fixtures/nodejs_event_loop.txt");
+const readNodeJsEventLoopStream =  createReadStream("app/fixtures/nodejs-event-loop-explanations.md");
 const writeLogStream = createWriteStream("app/log/log.txt");
 // const readSessionStream = createReadStream("app/fixtures/session_data.txt");
 
 let lines_ok=0, lines_ko=0;
+
+mongoose.connection.once('connected', () => {
+    // drop db to start in a clean state
+    mongoose.connection.db.dropDatabase();
+});
 
 
 // Read and save nodejs event loop explanation file

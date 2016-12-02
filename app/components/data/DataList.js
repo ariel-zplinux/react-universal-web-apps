@@ -103,7 +103,7 @@ export default class DataList extends React.Component {
                                 nextLabel={"next"}
                                 breakLabel={<a href="">...</a>}
                                 breakClassName={"break-me"}
-                                pageNum={this.state.pageNum}
+                                pageNum={110}
                                 marginPagesDisplayed={2}
                                 pageRangeDisplayed={5}
                                 clickCallback={this.handlePageClick.bind(this)}

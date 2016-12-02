@@ -55,7 +55,7 @@ export default (
             <Route component={DataListConnector} 
                 path="clients_per_user_agent"
                 paginate="true"
-                perPage="10"/>            
+                perPage="6"/>            
             <Route path="/:id" component={DetailedBillConnector}/>
             <Route path="/data/:id" component={DetailedDataConnector}/>
         </Route>
