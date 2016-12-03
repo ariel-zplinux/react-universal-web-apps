@@ -5,33 +5,14 @@ import App from './components/app';
 import NoMatch from './components/common/NoMatch';
 
 import Dashboard from './components/dashboard/Dashboard';
-// import LatestBills from './components/bill/LatestBills';
-import DetailedBill from './components/bill/DetailedBill';
 
 import DataList from './components/data/DataList';
 import DetailedData from './components/data/DetailedData';
 
-
-import DetailedBillStore from './stores/DetailedBillStore';
-// import LatestBillsStore from './stores/LatestBillsStore';
-
 import DataStore from './stores/DataStore';
 import DetailedDataStore from './stores/DetailedDataStore';
 
-
 import ComponentConnectorFactory from './components/common/ComponentConnectorFactory';
-
-const DetailedBillConnector = ComponentConnectorFactory.connect({
-    name: 'DetailedBillConnector',
-    component: DetailedBill,
-    store: DetailedBillStore
-});
-
-// const LatestsBillsConnector = ComponentConnectorFactory.connect({
-//     name: 'LatestsBillsConnector',
-//     component: LatestBills,
-//     store: LatestBillsStore
-// });
 
 const DataListConnector = ComponentConnectorFactory.connect({
     name: 'DataListConnector',
@@ -56,7 +37,6 @@ export default (
                 path="clients_per_user_agent"
                 paginate="true"
                 perPage="6"/>            
-            <Route path="/:id" component={DetailedBillConnector}/>
             <Route path="/data/:id" component={DetailedDataConnector}/>
         </Route>
         <Route path="*" component={NoMatch}/>

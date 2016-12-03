@@ -5,7 +5,6 @@ import axios from 'axios';
 
 import nconf from 'nconf';
 
-// import mongoose from 'mongoose';
 import mongoose from './db-manager'
 
 import React from 'react';
@@ -87,8 +86,6 @@ const routeManager = Object.assign({}, baseManager, {
         this.createMenuRoute(router);        
         this.createDataRoute(router);        
 
-        this.createLastestBillsRoute(router);
-        this.createDetailedBillRoute(router);
         return router;
     },
 
@@ -140,36 +137,6 @@ const routeManager = Object.assign({}, baseManager, {
         });
     },
     
-    createLastestBillsRoute(router) {
-        router.get('/latest-bills', (req, res) => {
-            this.retrieveLatestBills((err, data) => {
-                if(!err) {
-                    res.json(data);                                    
-                } else {
-                    res.status(500).send(err);
-                }
-            });
-        });
-    },
-
-    createDetailedBillRoute(router) {
-        router.get('/bill/:id', (req, res) => {
-            const id = req.params.id;
-
-            this.retrieveDetailedBills((err, data) => {
-                if(!err) {
-                    const billData = data.items.filter((item) => {
-                        return item.id === id;
-                    })[0];
-
-                    res.json(billData);                                    
-                } else {
-                    res.status(500).send(err);
-                }
-            });
-        });
-    },
-
     createDataRoute(router) {
         router.get('/data/:id', (req, res) => {
             const id = req.params.id;
@@ -295,18 +262,6 @@ const routeManager = Object.assign({}, baseManager, {
             callback(err, data); 
         })  
     },
-    
-    retrieveLatestBills(callback) {
-        FS.readFile('./app/fixtures/latest-bills.json', 'utf-8', (err, content) => {
-            callback(err, JSON.parse(content));
-        });
-    },
-
-    retrieveDetailedBills(callback) {
-        FS.readFile('./app/fixtures/detailed-bills.json', 'utf-8', (err, content) => {
-            callback(err, JSON.parse(content));
-        });
-    }
 });
 
 export default routeManager;

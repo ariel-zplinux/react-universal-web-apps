@@ -1,5 +1,4 @@
 const {createReadStream, createWriteStream} = require('fs');
-// const _ = require('lodash');
 
 // open db connection
 const mongoose = require('mongoose');
@@ -14,10 +13,14 @@ const writeLogStream = createWriteStream("app/log/log.txt");
 
 let lines_ok=0, lines_ko=0;
 
-mongoose.connection.once('connected', () => {
-    // drop db to start in a clean state
-    mongoose.connection.db.dropDatabase();
-});
+// Initialize database as soon as possible
+process.nextTick(() => {
+    mongoose.connection.once('connected', () => {
+        // drop db to start in a clean state
+        console.log('Database intialized');
+        mongoose.connection.db.dropDatabase();
+    });
+})
 
 
 // Read and save nodejs event loop explanation file
@@ -38,7 +41,6 @@ readNodeJsEventLoopStream.on("data", (data) => {
             console.log("SUCCESS - NodeJs Event Loop explanations added");
     });
 });
-
 
 // Read dictionary to initialize collection
 readDictionaryStream.on("data", (data) => {
@@ -68,7 +70,6 @@ readDictionaryStream.on("data", (data) => {
     const rawDataSchema = mongoose.Schema(rawDataSchemaJson);
     const RawData = mongoose.model("RawData", rawDataSchema);
 
-
     // to handle first and last line of stream edge cases (no full line)
     let n_fields;
     let firstLine, lastLine;
@@ -76,8 +77,6 @@ readDictionaryStream.on("data", (data) => {
     readSessionStream.on("data", (data) => {
         data = data.toString();
         lines = data.split('\n');
-        // c += lines.length;
-        // console.log("read "+lines.length);
         const rawDataJson = {}
         let first = true;
         let end = false;
@@ -85,7 +84,6 @@ readDictionaryStream.on("data", (data) => {
             // to handle first and last line of stream edge cases (no full line)
             n_fields = n_fields || line.split('|').length; 
             if (line.split('|').length !== n_fields ){
-                // console.log("first or last line: "+line);
                 // first line uncomplete case
                 if (first)
                     line = lastLine + line;
@@ -105,8 +103,6 @@ readDictionaryStream.on("data", (data) => {
             let r =  new RawData(rawDataJson)
             // to ensure line is relevant
             if (r.id_session && !end){
-                // if (r.id_session === "472d2822a2707b384d27ec510594dcee")
-                //     console.log(r);
                 r.device = r.dim_device_app_combo.replace(/(.*) -.*/g,'$1');
                 r.save( (err) => {
                     if (err){
@@ -131,7 +127,6 @@ readDictionaryStream.on("data", (data) => {
         // remove first document that contains field names
         RawData.find({device: "dim_device_app_combo"}).remove().exec();
 
-
         // Aggregation functions to extract relevant data
         const clientPerUserDeviceMapReduce = {
             map: function() { 
@@ -151,13 +146,13 @@ readDictionaryStream.on("data", (data) => {
             },
             out: 'clients_per_user_device'
         };
+
         RawData.mapReduce(clientPerUserDeviceMapReduce, (err, data, stats) => { 
             if (err)
                 console.log(err)
             else if (stats)
                 console.log('"Clients per device" map reduce took %d ms', stats.processtime)
         });
-
 
         const clientPerUserAgentMapReduce = {
             map: function() { 
@@ -222,4 +217,3 @@ readDictionaryStream.on("data", (data) => {
         writeLogStream.end();    
     });
 });
-

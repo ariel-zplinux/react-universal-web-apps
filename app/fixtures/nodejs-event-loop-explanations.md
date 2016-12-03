@@ -83,11 +83,7 @@ while there are still events to process:
         call the callback
 ```
 
-
-## NodeJs automata
-
 Here is a more detailed schema presenting actual phases. [[1]](#ref1)
-
 
 ```txt
    ┌───────────────────────┐
