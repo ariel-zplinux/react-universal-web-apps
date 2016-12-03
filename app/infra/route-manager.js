@@ -5,7 +5,8 @@ import axios from 'axios';
 
 import nconf from 'nconf';
 
-import mongoose from 'mongoose';
+// import mongoose from 'mongoose';
+import mongoose from './db-manager'
 
 import React from 'react';
 import {renderToString} from 'react-dom/server';
@@ -194,125 +195,105 @@ const routeManager = Object.assign({}, baseManager, {
     },
 
     retrieveClientsPerUserDevice(callback){
-        const db = mongoose.connect("mongodb://localhost/mydb");
+        const ClientsPerUserDeviceSchemaJson = {
+            _id: String,
+            value: {} 
+        };
+        // initialize RawData schema and model
+        const ClientsPerUserDeviceSchema = mongoose.Schema(
+            ClientsPerUserDeviceSchemaJson,
+            { collection: "clients_per_user_device" },
+            { skipInit: true}
+        );
 
-        mongoose.connection.on("open", function(){
-            const ClientsPerUserDeviceSchemaJson = {
-                _id: String,
-                value: {} 
+        let ClientsPerUserDevice;
+        try {
+            ClientsPerUserDevice = mongoose.model("ClientsPerUserDevice");
+        } catch (err) {
+            ClientsPerUserDevice = mongoose.model("ClientsPerUserDevice", ClientsPerUserDeviceSchema);
+        } 
+                
+        ClientsPerUserDevice.find({}).exec().then( (doc, err) => {
+            const data = {
+                items: doc.map(r => r.value)
             };
-            // initialize RawData schema and model
-            const ClientsPerUserDeviceSchema = mongoose.Schema(
-                ClientsPerUserDeviceSchemaJson,
-                { collection: "clients_per_user_device" },
-                { skipInit: true}
-            );
-
-            let ClientsPerUserDevice;
-            try {
-                ClientsPerUserDevice = mongoose.model("ClientsPerUserDevice");
-            } catch (err) {
-                ClientsPerUserDevice = mongoose.model("ClientsPerUserDevice", ClientsPerUserDeviceSchema);
-            } 
-                    
-            ClientsPerUserDevice.find({}).exec().then( (doc, err) => {
-                const data = {
-                    items: doc.map(r => r.value)
-                };
-                mongoose.connection.close();
-                callback(err, data); 
-            })
-        });
+            callback(err, data); 
+        })
     },
 
     retrieveClientsPerUserAgent(params, callback){
-        const db = mongoose.connect("mongodb://localhost/mydb");
         let {limit,offset} = params;
-        mongoose.connection.on("open", function(){
-            const ClientsPerUserAgentSchemaJson = {
-                _id: String,
-                value: {} 
-            };
-            // initialize RawData schema and model
-            const ClientsPerUserAgentSchema = mongoose.Schema(
-                ClientsPerUserAgentSchemaJson,
-                { collection: "clients_per_user_agent" },
-                { skipInit: true}
-            );
+        const ClientsPerUserAgentSchemaJson = {
+            _id: String,
+            value: {} 
+        };
+        // initialize RawData schema and model
+        const ClientsPerUserAgentSchema = mongoose.Schema(
+            ClientsPerUserAgentSchemaJson,
+            { collection: "clients_per_user_agent" },
+            { skipInit: true}
+        );
 
-            let ClientsPerUserAgent;
-            try {
-                ClientsPerUserAgent = mongoose.model("ClientsPerUserAgent");
-            } catch (err) {
-                ClientsPerUserAgent = mongoose.model("ClientsPerUserAgent", ClientsPerUserAgentSchema);
-            } 
-                    
-            ClientsPerUserAgent.find({}).sort({'value.value': -1}).skip(offset).limit(limit || 6).exec().then( (doc, err) => {
-                const data = {
-                    items: doc.map(r => r.value)
-                };
-                mongoose.connection.close();
-                callback(err, data); 
-            })
-        });
+        let ClientsPerUserAgent;
+        try {
+            ClientsPerUserAgent = mongoose.model("ClientsPerUserAgent");
+        } catch (err) {
+            ClientsPerUserAgent = mongoose.model("ClientsPerUserAgent", ClientsPerUserAgentSchema);
+        } 
+                
+        ClientsPerUserAgent.find({}).sort({'value.value': -1}).skip(offset).limit(limit || 6).exec().then( (doc, err) => {
+            const data = {
+                items: doc.map(r => r.value)
+            };
+            callback(err, data); 
+        })
     },
 
     retrieveDurationPerUserDevice(callback){
-        const db = mongoose.connect("mongodb://localhost/mydb");
+        const DurationPerUserDeviceSchemaJson = {
+            _id: String,
+            value: {} 
+        };
+        // initialize RawData schema and model
+        const DurationPerUserDeviceSchema = mongoose.Schema(
+            DurationPerUserDeviceSchemaJson,
+            { collection: "duration_per_user_device" },
+            { skipInit: true}
+        );
 
-        mongoose.connection.on("open", function(){
-            const DurationPerUserDeviceSchemaJson = {
-                _id: String,
-                value: {} 
+        let DurationPerUserDevice;
+        try {
+            DurationPerUserDevice = mongoose.model("DurationPerUserDevice");
+        } catch (err) {
+            DurationPerUserDevice = mongoose.model("DurationPerUserDevice", DurationPerUserDeviceSchema);
+        } 
+                
+        DurationPerUserDevice.find({}).exec().then( (doc, err) => {
+            const data = {
+                items: doc.map(r => r.value)
             };
-            // initialize RawData schema and model
-            const DurationPerUserDeviceSchema = mongoose.Schema(
-                DurationPerUserDeviceSchemaJson,
-                { collection: "duration_per_user_device" },
-                { skipInit: true}
-            );
-
-            let DurationPerUserDevice;
-            try {
-                DurationPerUserDevice = mongoose.model("DurationPerUserDevice");
-            } catch (err) {
-                DurationPerUserDevice = mongoose.model("DurationPerUserDevice", DurationPerUserDeviceSchema);
-            } 
-                    
-            DurationPerUserDevice.find({}).exec().then( (doc, err) => {
-                const data = {
-                    items: doc.map(r => r.value)
-                };
-                mongoose.connection.close();
-                callback(err, data); 
-            })
-        });
+            callback(err, data); 
+        })
     },
 
     retrieveData(id, callback){
-        const db = mongoose.connect("mongodb://localhost/mydb");
-
-        mongoose.connection.on("open", function(){
-            const fileDataSchema = mongoose.Schema({
-                _id: String,
-                value: String
-            });
-            let FileData;
-            try {
-                FileData = mongoose.model("FileData");
-            } catch (err) {
-                FileData = mongoose.model("FileData", fileDataSchema);
-            } 
-
-            FileData.findOne({_id: id}).exec().then( (doc, err) => {
-                const data = {
-                    items: doc.value
-                };
-                mongoose.connection.close();
-                callback(err, data); 
-            })  
+        const fileDataSchema = mongoose.Schema({
+            _id: String,
+            value: String
         });
+        let FileData;
+        try {
+            FileData = mongoose.model("FileData");
+        } catch (err) {
+            FileData = mongoose.model("FileData", fileDataSchema);
+        } 
 
+        FileData.findOne({_id: id}).exec().then( (doc, err) => {
+            const data = {
+                items: doc.value
+            };
+            callback(err, data); 
+        })  
     },
     
     retrieveLatestBills(callback) {
