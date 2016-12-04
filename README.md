@@ -1,32 +1,74 @@
-# Flux Universal Application
+# Test project with MERN stack
 
-> Other variants of the application, along with their short description are linked from
-> [master](https://github.com/zen-js-code/react-universal-web-apps/) branch.
+A basic application that extracts and aggregates data, then display it.
 
-## Installation & Execution
+Using Mongo Express React and Nodejs.
 
-The application is installed using:
+Stack
+-----
 
+- Nodejs (>= v6)
+- Nvm
+- Express
+- React
+- Flux
+- Mongodb
+- React Router
+- React Markdown
+- React Paginate 
+- Mongoose
+- Babel
+- Webpack
+- Gulp
+- Docker
+- Docker-compose
+
+Quick Start
+-----------
+
+```shell
+$ git clone https://ariel-zplinux@bitbucket.org/ariel-zplinux/react-universal-webapp-fork.git 
+$ cd react-universal-webapp-fork
+$ npm install
+$ npm run prepare && npm start
 ```
-npm install
+
+Or with Docker and Docker-compose (after changing dbURI from 'localhost' to 'mongo' in app/infra/db-manager.js)
+
+Rem: it works, but there is a blocking bug, not resolved yet, regarding clients per user agent paginated route.
+```shell
+$ git clone https://ariel-zplinux@bitbucket.org/ariel-zplinux/react-universal-webapp-fork.git 
+$ cd react-universal-webapp-fork
+$ docker-compose build
+$ docker-compose up
 ```
 
-and ran using:
 
-```
-npm start
-```
+NPM Commands
+------------
 
-You can access the application's server directly under http://localhost:6001 or via its BrowserSync access server http://localhost:3000. BrowserSync console is available under http://localhost:3001.
+|Command|Description|
+|---|---|
+|npm start|Start server @**localhost:6001**| 
+|npm run prepare|Prepare data|
 
-## Description
+API endpoints
+-------------
 
-This variant of the application, we are going to make a transformation from our naive Flux-less  application to still (hopefully less) naive Flux-full one.
 
-**Flux architecture, as it applies here:**
+|HTTP Method|Url|Parameters|Description|
+|---|---|---|---|
+|GET|/api/menu||Get menu|
+|GET|/api/clients-per-user-device||Get clients per user device|
+|GET|/api/clients-per-user-agent| offset, limit|Get clients per user agent|
+|GET|/api/duration-per-user-device||Get duration per user device|
+|GET|/api/data/:id||Get detailed data|
 
-![Flux Architecture](flux-architecture.png)
+Links
+-----
 
-**Schematically, it can be shown like this:**
-
-![Application Components](flux-app-structure.png)
+- Server side rendering - https://www.smashingmagazine.com/2016/03/server-side-rendering-react-node-express/
+- MERN boilerplate - https://github.com/zen-js-code/react-universal-web-apps/
+- Readme inspiration - https://github.com/r-park/soundcloud-redux
+- React markdown - https://github.com/rexxars/react-markdown
+- React paginate - https://github.com/AdeleD/react-paginate

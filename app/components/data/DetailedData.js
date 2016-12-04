@@ -42,7 +42,7 @@ export default class DetailedData extends React.Component {
     }
 
     render() {        
-        // const amount = `$${this.state.amount}`;
+        let source = this.state.items || '';
 
         return (
             <section className="latest-bills">
@@ -53,7 +53,7 @@ export default class DetailedData extends React.Component {
                 <section className="section-content">
                     <div>
                         <br/>
-                        <ReactMarkdown source={this.state.items} />
+                        <ReactMarkdown source={source} />
                     </div>
                 </section>
             </section>

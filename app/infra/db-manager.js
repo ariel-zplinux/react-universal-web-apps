@@ -3,8 +3,13 @@ var mongoose = require( 'mongoose' );
 
 // Build the connection string 
 var dbURI = 'mongodb://localhost/mydb'; 
+// for docker-compose
+// var dbURI = 'mongodb://mongo/mydb'; 
 
-// Create the database connection 
+// to use native promise (and prevent non relevant warning)
+mongoose.Promise = global.Promise;
+
+// Create the database connection
 mongoose.connect(dbURI); 
 
 // CONNECTION EVENTS

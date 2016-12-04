@@ -156,7 +156,8 @@ const routeManager = Object.assign({}, baseManager, {
             {name: "Clients Per User Device", link:"/clients_per_user_device"},
             {name: "Clients Per User Agent", link:"/clients_per_user_agent"},
             {name: "Duration Per User Device", link:"/duration_per_user_device"},
-            {name: "NodeJs Event Loop", link:"/data/nodejs_event_loop"}            
+            {name: "NodeJs Event Loop", link:"/data/nodejs_event_loop"},
+            {name: "Readme", link:"/data/readme"}                        
         ]};
         callback(null, menu);
     },

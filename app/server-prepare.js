@@ -1,19 +1,11 @@
+require('babel/register');
 const {createReadStream, createWriteStream} = require('fs');
 
-// open db connection
-const mongoose = require('mongoose');
-const db = mongoose.connect("mongodb://localhost/mydb");
-
-const readDictionaryStream =  createReadStream("app/fixtures/session_dictionary.txt");
-const readSessionStream = createReadStream("app/fixtures/airbnb_session_data.txt");
-// const readNodeJsEventLoopStream =  createReadStream("app/fixtures/nodejs_event_loop.txt");
-const readNodeJsEventLoopStream =  createReadStream("app/fixtures/nodejs-event-loop-explanations.md");
-const writeLogStream = createWriteStream("app/log/log.txt");
-// const readSessionStream = createReadStream("app/fixtures/session_data.txt");
-
-let lines_ok=0, lines_ko=0;
+// model FileData
+const FileData = require('./models/FileData.js');
 
 // Initialize database as soon as possible
+const mongoose = require('./infra/db-manager');
 process.nextTick(() => {
     mongoose.connection.once('connected', () => {
         // drop db to start in a clean state
@@ -22,14 +14,18 @@ process.nextTick(() => {
     });
 })
 
+const readDictionaryStream =  createReadStream("app/fixtures/session_dictionary.txt");
+const readSessionStream = createReadStream("app/fixtures/airbnb_session_data.txt");
+// const readNodeJsEventLoopStream =  createReadStream("app/fixtures/nodejs_event_loop.txt");
+const readNodeJsEventLoopStream =  createReadStream("app/fixtures/nodejs-event-loop-explanations.md");
+const readReadmeStream =  createReadStream("README.md");
+const writeLogStream = createWriteStream("app/log/log.txt");
+// const readSessionStream = createReadStream("app/fixtures/session_data.txt");
+
+let lines_ok=0, lines_ko=0;
 
 // Read and save nodejs event loop explanation file
 readNodeJsEventLoopStream.on("data", (data) => {
-    const fileDataSchema = mongoose.Schema({
-        _id: String,
-        value: String
-    });
-    const FileData = mongoose.model("FileData", fileDataSchema);
     const f = new FileData();
     f.value = data;
     f._id = "nodejs_event_loop";
@@ -41,6 +37,21 @@ readNodeJsEventLoopStream.on("data", (data) => {
             console.log("SUCCESS - NodeJs Event Loop explanations added");
     });
 });
+
+// Read and save Readme file
+readReadmeStream.on("data", (data) => {
+    const f = new FileData();
+    f.value = data;
+    f._id = "readme";
+    f.save( (err) => {
+        if (err){
+            console.log("ERR: "+err)        
+        }
+        else
+            console.log("SUCCESS - README file added");
+    });
+});
+
 
 // Read dictionary to initialize collection
 readDictionaryStream.on("data", (data) => {
@@ -199,7 +210,7 @@ readDictionaryStream.on("data", (data) => {
                 var duration = days + hours + minutes + seconds;
                 return {
                     name: key,
-                    value: duration
+                    value: duration // _d_h_m_s format
                 };
             },
             out: 'duration_per_user_device'
