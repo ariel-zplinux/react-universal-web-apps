@@ -191,6 +191,9 @@ const routeManager = Object.assign({}, baseManager, {
 
     retrieveClientsPerUserAgent(params, callback){
         let {limit,offset} = params;
+        limit = limit ? parseInt(limit) : 6;
+        offset = offset ? parseInt(offset) : 0;
+        
         const ClientsPerUserAgentSchemaJson = {
             _id: String,
             value: {} 
@@ -209,7 +212,7 @@ const routeManager = Object.assign({}, baseManager, {
             ClientsPerUserAgent = mongoose.model("ClientsPerUserAgent", ClientsPerUserAgentSchema);
         } 
                 
-        ClientsPerUserAgent.find({}).sort({'value.value': -1}).skip(offset).limit(limit || 6).exec().then( (doc, err) => {
+        ClientsPerUserAgent.find({}).sort({'value.value': -1}).skip(offset || 0).limit(limit || 6).exec().then( (doc, err) => {
             const data = {
                 items: doc.map(r => r.value)
             };
