@@ -15,7 +15,8 @@ Stack
 - Mongodb
 - React Router
 - React Markdown
-- React Paginate 
+- React Paginate
+- Axios 
 - Mongoose
 - Babel
 - Webpack
@@ -35,7 +36,7 @@ $ npm run prepare && npm start
 
 Or with Docker and Docker-compose (after changing dbURI from 'localhost' to 'mongo' in app/infra/db-manager.js)
 
-Rem: it works, but there is a blocking bug, not resolved yet, regarding clients per user agent paginated route.
+Rem: it works, but there is a blocking bug, not resolved yet, regarding clients per user agent pagination.
 ```shell
 $ git clone https://ariel-zplinux@bitbucket.org/ariel-zplinux/react-universal-webapp-fork.git 
 $ cd react-universal-webapp-fork
@@ -67,8 +68,8 @@ API endpoints
 Links
 -----
 
-- Server side rendering - https://www.smashingmagazine.com/2016/03/server-side-rendering-react-node-express/
-- MERN boilerplate - https://github.com/zen-js-code/react-universal-web-apps/
-- Readme inspiration - https://github.com/r-park/soundcloud-redux
-- React markdown - https://github.com/rexxars/react-markdown
-- React paginate - https://github.com/AdeleD/react-paginate
+- Server side rendering - [https://www.smashingmagazine.com/2016/03/server-side-rendering-react-node-express/](https://www.smashingmagazine.com/2016/03/server-side-rendering-react-node-express/)
+- MERN boilerplate - [https://github.com/zen-js-code/react-universal-web-apps/](https://github.com/zen-js-code/react-universal-web-apps/)
+- Readme inspiration - [https://github.com/r-park/soundcloud-redux](https://github.com/r-park/soundcloud-redux)
+- React markdown - [https://github.com/rexxars/react-markdown](https://github.com/rexxars/react-markdown)
+- React paginate - [https://github.com/AdeleD/react-paginate](https://github.com/AdeleD/react-paginate)

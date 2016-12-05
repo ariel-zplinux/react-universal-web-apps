@@ -1,11 +1,11 @@
 {
   "name": "react-ssr-example",
   "version": "0.0.1",
-  "description": "An example application, complete with development setup, for SSR with React, Node and Express.",
+  "description": "Test project with MERN stack.",
   "main": "app/server.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zen-js-code/react-ssr-example.git"
+    "url": "git+https://ariel-zplinux@bitbucket.org/ariel-zplinux/react-universal-webapp-fork.git"
   },
   "keywords": [
     "ssr",
@@ -13,12 +13,9 @@
     "node",
     "express"
   ],
-  "author": "Dmitry Nutels",
+  "author": "Ariel Biton",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/zen-js-code/react-ssr-example/issues"
-  },
-  "homepage": "https://github.com/zen-js-code/react-ssr-example#readme",
+  "homepage": "https://bitbucket.org/ariel-zplinux/react-universal-webapp-fork/",
   "scripts": {
     "gulp": "gulp",
     "debug": "node-dev --debug app/babel-server.js",
