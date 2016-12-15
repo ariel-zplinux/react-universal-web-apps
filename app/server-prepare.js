@@ -14,6 +14,9 @@ process.nextTick(() => {
     });
 })
 
+
+const readNodeJsEventLoopPath = "app/fixtures/nodejs-event-loop-explanations.md";
+
 const readDictionaryStream =  createReadStream("app/fixtures/session_dictionary.txt");
 const readSessionStream = createReadStream("app/fixtures/airbnb_session_data.txt");
 // const readNodeJsEventLoopStream =  createReadStream("app/fixtures/nodejs_event_loop.txt");
@@ -23,6 +26,55 @@ const writeLogStream = createWriteStream("app/log/log.txt");
 // const readSessionStream = createReadStream("app/fixtures/session_data.txt");
 
 let lines_ok=0, lines_ko=0;
+
+
+
+const saveData = (data, id) => {
+    const f = new FileData();
+    f.value = data;
+    f.id = id;
+    // f._id = "nodejs_event_loop";
+    f.save( (err) => {
+        if (err){
+            console.log("ERR: "+err)        
+        }
+        else
+            console.log("SUCCESS - data added");
+    });
+}
+
+const readNodeJsEventLoopFilePromise = new Promise( (saveData, reject) => {
+    fs.readFile(nodeJsEventLoopPath, (err, data) => {
+        err ? reject(err) : resolve(data)
+    });
+})
+
+const readReadmeFilePromise = new Promise( (saveData, reject) => {
+    fs.readFile(readMePath, (err, data) => {
+        err ? reject(err) : resolve(data)
+    });
+})
+
+
+
+const fs = require('fs');
+
+const map = {
+  'file1.txt': '111111111',
+  'file2.txt': '222222222',
+  'file3.txt': '333333333'
+};
+
+function writeFiles(files) {
+  return Promise.all(Object.keys(files).map(fileName =>
+    new Promise((resolve, reject) => {
+      fs.writeFile(fileName, map[fileName], err => err ? reject(err) : resolve());
+    })
+  ));
+}
+
+writeFiles(map).then(() => console.log('Tada!'));
+
 
 // Read and save nodejs event loop explanation file
 readNodeJsEventLoopStream.on("data", (data) => {
