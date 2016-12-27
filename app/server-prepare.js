@@ -68,7 +68,7 @@ const contextDictionaryFile = {
 
 const contextSessionFile = {
     id: 'session_data',
-    path: 'app/fixtures/airbnb_session_data.txt'
+    path: 'app/fixtures/session_data.txt'
 };
 
 // -----------------------------------
