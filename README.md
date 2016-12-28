@@ -28,8 +28,8 @@ Quick Start
 -----------
 
 ```shell
-$ git clone https://ariel-zplinux@bitbucket.org/ariel-zplinux/react-universal-webapp-fork.git 
-$ cd react-universal-webapp-fork
+$ git clone https://github.com/ariel-zplinux/data-extractor-mern.git
+$ cd data-extractor-mern
 $ npm install
 $ npm run prepare && npm start
 ```
@@ -38,8 +38,8 @@ Or with Docker and Docker-compose (after changing dbURI from 'localhost' to 'mon
 
 Rem: it works, but there is a blocking bug, not resolved yet, regarding clients per user agent pagination.
 ```shell
-$ git clone https://ariel-zplinux@bitbucket.org/ariel-zplinux/react-universal-webapp-fork.git 
-$ cd react-universal-webapp-fork
+$ git clone https://github.com/ariel-zplinux/data-extractor-mern.git
+$ cd data-extractor-mern
 $ docker-compose build
 $ docker-compose up
 ```
