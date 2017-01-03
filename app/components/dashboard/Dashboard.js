@@ -3,9 +3,9 @@ import React from 'react';
 export default class Dashboard extends React.Component {
     render() {
         return (
-            <main className="app-content dashboard">
+            <main role="main" id="main">
                 {this.props.children}
-            </main>
+            </main>            
         );
     }
 }

@@ -1,5 +1,4 @@
 import React from 'react';
-import {IndexLink} from 'react-router';
 
 export default class Header extends React.Component {
     static get contextTypes() {
@@ -10,10 +9,14 @@ export default class Header extends React.Component {
 
     render() {
         return (
-            <header className="app-header">
-                <h1 className="title">
-                    <IndexLink to={this.context.root}>App</IndexLink>
-                </h1>
+            <header id="header">
+                <nav className="navbar navbar-default" role="navigation">
+                    <div className="container-fluid">
+                        <div className="navbar-header">
+                            <a className="navbar-brand" href="/">Zp</a>
+                        </div>
+                    </div>
+                </nav>
             </header>
         );
     }

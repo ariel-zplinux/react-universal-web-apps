@@ -1,0 +1,185 @@
+/* Space out content a bit */
+#body{
+/*	padding-right: 15%;
+	padding-left: 15%;
+	padding-top: 10px;
+	padding-bottom: 10px;
+
+	background-image: url('/assets/images/tlv3.jpg');
+	background-size: 100% 600%;
+	font-family: Inconsolata, monospace;
+*/
+
+	background: url(/assets/images/tlv2.jpg) no-repeat center center fixed; 
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	background-size: cover;
+
+}
+
+ul{ 
+  list-style-type: none;
+}
+
+#header{
+	left: 0;
+	right: 0;
+	padding-right: 15%;
+	padding-left: 15%;
+	padding-top: 10px;
+	padding-bottom: 5px;
+	position: relative;
+}
+
+#footer{
+	display: block;
+	position: fixed;
+	padding-right: 15%;
+	padding-left: 15%;
+	height: 100px;
+	bottom: 10px;
+	left: 0;
+	right: 0;
+}
+
+#main {
+    position: fixed;
+    bottom: 120px;
+    left: 15%;
+    right: 15%;
+    top: 100px;
+	overflow-y: auto;
+  	background: rgba(0, 0, 0, 0.5);
+}
+#landingpage {
+	padding-right: 10px;
+	padding-left: 10px;
+	padding-top: 10px;
+	color: white;
+}
+.panel {
+	background: rgba(0, 0, 0, 0.1);
+}
+
+#login-buttons {
+	display: block;
+}
+
+.navbar{
+	margin-bottom: 0px;
+}
+
+#screen{
+	height: 500px;
+}
+
+
+.darkBG{
+	background: #999;
+}
+
+.darkerBG{
+	background: #666;
+}
+
+.darkestBG{
+	background: #333;
+}
+
+#div-player{
+	position: relative;
+	bottom: 0;
+	left: 0;
+	vertical-align: bottom;
+
+	width: 100%;
+}
+
+audio{
+	width:100%;
+	height:100%;
+}
+
+video{
+	width:99%;
+	height:100%;
+}
+
+#menu-footer{
+	width: 100%
+}
+#menu-footer > li:last-child {
+    float:right;
+}
+
+.media {
+	position: relative;
+	background: #bbb;
+	border-radius: 3px;
+	padding: 10px;
+	margin-bottom: 20px;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+}
+
+.media-active {
+	position: relative;
+	background: #1d1;
+	border-radius: 3px;
+	padding: 10px;
+	margin-bottom: 20px;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+}
+.parent_media{
+	position: relative;
+	height: 60%;
+	bottom: 10px;
+
+}
+.title {
+	float: left;
+	width: 80%;
+	height: 100%;
+	white-space: nowrap;
+	overflow: hidden;
+    	text-overflow: ellipsis;
+}
+
+.control {
+	float: right;
+	width: 10%;
+	height: 100%
+}
+
+#status {
+    width: 100%;
+	font-family: sans-serif;
+	background: rgba(0, 0, 0, 0.3);
+	color: black;
+}
+
+#control {
+	background: rgba(0, 0, 0, 0.3);
+	width: 100%;
+}
+
+#console {
+	/*background: -webkit-radial-gradient(center center, contain, rgba(0,150,0,1), black) center center no-repeat, black; /*center center for the gradient scrolls with the page :(*/
+	font-family: sans-serif;
+	font-size: 3.5em;
+	background: rgba(0, 0, 0, 0.3);
+	color: black;
+}
+
+.interlace {
+	background: url(images/interlace.png) top left repeat, rgba(255,255,255,0.5);
+}
+
+.selected{
+    background-color: cyan;
+}
+.div-upload{
+	display: inline-block;
+}
+.dropzone{
+	border: 2px dotted;
+}

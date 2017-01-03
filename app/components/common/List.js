@@ -10,7 +10,9 @@ export default class List extends React.Component {
     }
 
     createItemsMarkup(items, Type) {
-        const markupItems = items.map((item) => {            
+        const markupItems = items.map((item) => {
+            item.name = item.username ? item.username : item.name;
+            item.mode = 'view';
             return (
                 <li className="ui-list-item" key={item.name}>
                     <Type data={item}/>
