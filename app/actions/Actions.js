@@ -4,11 +4,28 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import Consts from './Consts';
 
 export class Actions {
+
+    getMessages(params) {
+        this.loadMessages(params).then( (response) => {
+            AppDispatcher.dispatch({
+                type: Consts.GET_MESSAGES, 
+                data: response.data
+            });
+        }).catch((err) => {
+            throw new Error(err);
+        });
+    }
+
+    loadMessages(params, domain = '') {
+        const url = `${domain}/api/messages`;
+        return axios.get(url);
+    }
+
     sendNewMessage(params) {
         this.loadNewMessage(params).then( (response) => {
             AppDispatcher.dispatch({
                 type: Consts.SEND_NEW_MESSAGE, 
-                data: response
+                data: response.data
             });
         }).catch((err) => {
             throw new Error(err);

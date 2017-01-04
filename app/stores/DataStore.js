@@ -2,12 +2,10 @@ import BaseStore from './BaseStore';
 import Consts from '../actions/Consts';
 
 let latestData = {};
-let messages = [];
 
 export default class DataStore extends BaseStore {
     resetAll() {
         latestData = {};
-        messages = [];
     }
 
     setAll(data) {
@@ -16,8 +14,7 @@ export default class DataStore extends BaseStore {
 
 
     addNewMessage(data) {
-        messages.push(data);
-        latestData.messages = messages;
+        latestData.messages.push(data);
     }
 
     getMessages() {
@@ -40,6 +37,12 @@ export default class DataStore extends BaseStore {
             break;
         case Consts.SEND_NEW_MESSAGE:
             this.addNewMessage(action.data);
+            this.emitChange();
+            break;
+        case Consts.GET_MESSAGES:
+            const state = this.getAll();
+            state.messages = action.data.items;            
+            this.setAll(state);
             this.emitChange();
             break;
         default:

@@ -18,6 +18,8 @@ import ContextWrapper from '../components/common/ContextWrapper';
 
 import RandomName from 'random-name';
 
+import Message from '../models/Message';
+
 const routeManager = Object.assign({}, baseManager, {
     configureDevelopmentEnv(app) {
         const apiRouter = this.createApiRouter();
@@ -90,16 +92,59 @@ const routeManager = Object.assign({}, baseManager, {
 
         this.createNewUserRoute(router);        
         this.createNewMessageRoute(router);
+        this.createGetMessagesRoute(router);
 
         return router;
     },
 
-    createNewMessageRoute(router) {
-        router.post('/message/new', (req, res) => {
-            const data = req.body;
-            res.json(data);                                    
+    createGetMessagesRoute(router){
+        router.get('/messages', (req, res) => {
+            this.retrieveMessages((err, data) => {
+                if(!err) {
+                    res.json(data);                                    
+                } else {
+                    res.status(500).send(err);
+                }
+            });
         });
     },
+    retrieveMessages(callback){
+        Message.find({}).sort({'date': -1}).limit(50).exec().then( (doc, err) => {
+            callback(err, {items: doc.reverse()}); 
+        });  
+    },
+    createNewMessageRoute(router) {
+        router.post('/message/new', (req, res) => {
+            //retrieve post parameters
+            const message =req.body;
+            this.addMessageToDb(message, (err, data) =>{
+                if(!err) {
+                    res.json(data);                                    
+                } else {
+                    res.status(500).send(err);
+                }
+            });
+        });
+    },
+
+    addMessageToDb(message, callback) {
+        const m = new Message();
+        m.content = message.content;
+        m.username = message.username;
+        m.save( (err) => {
+            if (err){
+                callback(err, null);
+            }
+            else {
+                const newMessage = {
+                    content: m.content,
+                    username: m.username,
+                    id: m.id
+                }
+                callback(null, newMessage);
+            }
+        });
+    },  
 
     createNewUserRoute(router) {
         router.get('/user/new', (req, res) => {

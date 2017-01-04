@@ -1,5 +1,4 @@
 import React from 'react';
-import RandomName from 'random-name';
 
 export default class List extends React.Component {
     render() {
@@ -13,11 +12,11 @@ export default class List extends React.Component {
     createItemsMarkup(items, Type) {
         const markupItems = items.map((item) => {
             item.name = item.username ? item.username : item.name;
-            item.data.mode = 'view';
-            const key = RandomName();
+            item.mode = 'view';
+            const key = item.id;
             return (
                 <li className="ui-list-item" key={key}>
-                    <Type data={item.data}/>
+                    <Type data={item}/>
                 </li>
             );
         });

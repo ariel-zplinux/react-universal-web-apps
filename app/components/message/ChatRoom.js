@@ -10,11 +10,11 @@ import Message from './Message';
 import Actions from '../../actions/Actions';
 
 export default class ChatRoom extends React.Component {
-    static loadAction(params, req) {
+    static loadAction(params, req, domain) {
         // to have menu displayed when root address called
         params.url = (req === '/') ? '/menu' : req;
         // Actions.loadData(params, domain);
-        return true;
+        return Actions.loadMessages(params, domain);
     }
 
 
@@ -45,6 +45,7 @@ export default class ChatRoom extends React.Component {
         // Actions.getClientsPerUserDeviceData(this.props.params);
         // Actions.getDataList(this.props.params, this.props.route.path);
         Actions.connectNewUser(this.props.params);
+        Actions.getMessages(this.props.params);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -87,6 +88,10 @@ export default class ChatRoom extends React.Component {
         //     offset: this.state.offset
         // };
         // Actions.getDataList(params, this.props.route.path);
+
+        // to auto scroll to last message
+        const elem = document.getElementById('main');
+        elem.scrollTop = elem.scrollHeight;
     }
 
     onChange() {
@@ -100,7 +105,7 @@ export default class ChatRoom extends React.Component {
 
     render() {
         let status = 'ready' || this.state.status;
-        const items = this.state.messages;
+        let items = this.state.messages;
         const data = {
             username: this.state.username,
             mode: this.state.mode
