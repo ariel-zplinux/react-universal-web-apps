@@ -22,6 +22,10 @@ export default class DataStore extends BaseStore {
             this.setAll(action.data);
             this.emitChange();
             break;
+        case Consts.CONNNECT_NEW_USER:
+            this.setAll(action.data);        
+            this.emitChange();
+            break;
         default:
         }
     }

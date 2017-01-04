@@ -9,7 +9,7 @@ export default class Footer extends React.Component {
     }
 
     render() {
-        const data = {mode: 'new'};        
+        const data = this.props.data;
         return (
             <footer id='footer'>
                 <Message data={data}/>

@@ -23,7 +23,7 @@ export default class Message extends React.Component {
                     <div className="panel-body" id="status">
 							
 						<div className="input-group">
-							<span className="input-group-addon" id="basic-addon1">Name</span>
+							<span className="input-group-addon" id="basic-addon1">{username}</span>
 							<input type="text" className="form-control" id="name" placeholder="Name"/>
 						</div>
                     

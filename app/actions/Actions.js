@@ -4,6 +4,22 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import Consts from './Consts';
 
 export class Actions {
+    connectNewUser(params) {
+        this.loadNewUserName(params).then( (response) => {
+            AppDispatcher.dispatch({
+                type: Consts.CONNNECT_NEW_USER, 
+                data: response.data
+            });
+        }).catch((err) => {
+            throw new Error(err);
+        });
+    }
+
+    loadNewUserName(params, domain = '') {
+        const url = `${domain}/api/user/new`;
+        return axios.get(url);
+    }
+
     loadDetailedData(params, domain = '') {
         const url = `${domain}/api/data/${params.id}`;
         return axios.get(url);

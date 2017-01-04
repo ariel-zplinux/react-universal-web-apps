@@ -16,6 +16,8 @@ import routes from '../routes';
 
 import ContextWrapper from '../components/common/ContextWrapper';
 
+import RandomName from 'random-name';
+
 const routeManager = Object.assign({}, baseManager, {
     configureDevelopmentEnv(app) {
         const apiRouter = this.createApiRouter();
@@ -86,7 +88,19 @@ const routeManager = Object.assign({}, baseManager, {
         this.createMenuRoute(router);        
         this.createDataRoute(router);        
 
+        this.createNewUserRoute(router);        
+
         return router;
+    },
+
+    createNewUserRoute(router) {
+        router.get('/user/new', (req, res) => {
+            const data = { 
+                username: RandomName(),
+                mode: 'new'
+            }
+            res.json(data);                                    
+        });
     },
 
     createClientsPerUserDeviceRoute(router) {

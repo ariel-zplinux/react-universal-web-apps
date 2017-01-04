@@ -1,6 +1,7 @@
 import React from 'react';
 
 import List from '../common/List';
+import Footer from '../main/Footer';
 import Message from './Message';
 // import CompactBill from './CompactBill';
 // import CompactData from './CompactData';
@@ -42,6 +43,7 @@ export default class ChatRoom extends React.Component {
         // Actions.getLatestBillsData(this.props.params);
         // Actions.getClientsPerUserDeviceData(this.props.params);
         Actions.getDataList(this.props.params, this.props.route.path);
+        Actions.connectNewUser(this.props.params);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -62,13 +64,8 @@ export default class ChatRoom extends React.Component {
             }
         }
 
-        // check change of url 
-        if (this.props.route.path !== nextProps.route.path) {
-            result = true;
-        }
-
-        // check change of offset
-        if (this.state.offset !== nextState.offset) {
+        // check change of username 
+        if (this.state.username !== nextState.username) {
             result = true;
         }
             
@@ -92,6 +89,10 @@ export default class ChatRoom extends React.Component {
     render() {
         let status = 'ready' || this.state.status;
         const items = this.state.items;
+        const data = {
+            username: this.state.username,
+            mode: this.state.mode
+        };
         return (
             <section id="list">
                 <div className="container-fluid">
@@ -100,6 +101,7 @@ export default class ChatRoom extends React.Component {
                         : 'Waiting to connect'
                     }               
                 </div>
+                <Footer data={data}/>
             </section>    
         );
     }
