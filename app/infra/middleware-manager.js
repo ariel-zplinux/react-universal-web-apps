@@ -1,6 +1,7 @@
 import compression from 'compression';
 import nconf from 'nconf';
 import morgan from 'morgan';
+import bodyParser from 'body-parser';
 
 import baseManager from './base-manager';
 
@@ -17,6 +18,8 @@ const middlewareManager = Object.assign({}, baseManager, {
         });
 
         app.use(morgan('dev'));
+        
+        app.use(bodyParser());
 
     }
 });

@@ -10,10 +10,11 @@ import Message from './Message';
 import Actions from '../../actions/Actions';
 
 export default class ChatRoom extends React.Component {
-    static loadAction(params, req, domain) {
+    static loadAction(params, req) {
         // to have menu displayed when root address called
         params.url = (req === '/') ? '/menu' : req;
-        return Actions.loadData(params, domain);
+        // Actions.loadData(params, domain);
+        return true;
     }
 
 
@@ -42,43 +43,50 @@ export default class ChatRoom extends React.Component {
     componentDidMount() {
         // Actions.getLatestBillsData(this.props.params);
         // Actions.getClientsPerUserDeviceData(this.props.params);
-        Actions.getDataList(this.props.params, this.props.route.path);
+        // Actions.getDataList(this.props.params, this.props.route.path);
         Actions.connectNewUser(this.props.params);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
         let result = true;
 
-        if (this.state.items && nextState.items) {
-            const oldItems = this.state.items;
-            const newItems = nextState.items;
 
-            if (oldItems.length === newItems.length) {
-                const validList = newItems.filter((item, index) => {
-                    return oldItems[index].name !== item.name;
-                });
-
-                if (validList.length === 0) {
-                    result = false;
-                }
-            }
+        if ((this.state.messages && this.state.messages.length) 
+            !== (nextState.messagse && nextState.messages.length)) {
+            result = true;
         }
+
+        // check if new messages
+
+        // if (this.state.messages && nextState.messages) {
+        //     const oldItems = this.state.items;
+        //     const newItems = nextState.items;
+
+        //     if (oldItems.length === newItems.length) {
+        //         const validList = newItems.filter((item, index) => {
+        //             return oldItems[index].name !== item.name;
+        //         });
+
+        //         if (validList.length === 0) {
+        //             result = false;
+        //         }
+        //     }
+        // }
 
         // check change of username 
         if (this.state.username !== nextState.username) {
             result = true;
         }
-            
         return result;
     }
 
     componentDidUpdate() {
-        // update state after shouldComponentUpdate hook
-        let params = {
-            limit: this.props.route.perPage,
-            offset: this.state.offset
-        };
-        Actions.getDataList(params, this.props.route.path);
+        // // update state after shouldComponentUpdate hook
+        // let params = {
+        //     limit: this.props.route.perPage,
+        //     offset: this.state.offset
+        // };
+        // Actions.getDataList(params, this.props.route.path);
     }
 
     onChange() {
@@ -86,9 +94,13 @@ export default class ChatRoom extends React.Component {
         this.setState(state);
     }
 
+    onNewMessage(data) {
+        Actions.sendNewMessage(data);
+    }
+
     render() {
         let status = 'ready' || this.state.status;
-        const items = this.state.items;
+        const items = this.state.messages;
         const data = {
             username: this.state.username,
             mode: this.state.mode
@@ -101,7 +113,7 @@ export default class ChatRoom extends React.Component {
                         : 'Waiting to connect'
                     }               
                 </div>
-                <Footer data={data}/>
+                <Footer data={data} onNewMessage={this.onNewMessage}/>
             </section>    
         );
     }

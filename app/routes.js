@@ -16,8 +16,8 @@ import DataStore from './stores/DataStore';
 
 import ComponentConnectorFactory from './components/common/ComponentConnectorFactory';
 
-const DataListConnector = ComponentConnectorFactory.connect({
-    name: 'DataListConnector',
+const ChatRoomConnector = ComponentConnectorFactory.connect({
+    name: 'ChatRoom',
     component: ChatRoom,
     store: DataStore
 });
@@ -31,8 +31,8 @@ const DataListConnector = ComponentConnectorFactory.connect({
 export default (
     <Route path="/" component={App}>
         <Route component={Dashboard}>            
-            <IndexRoute component={DataListConnector}/>
-            <Route component={DataListConnector} path="menu"/>            
+            <IndexRoute component={ChatRoomConnector}/>
+            <Route component={ChatRoomConnector} path="menu"/>            
         </Route>
         <Route path="*" component={NoMatch}/>
     </Route>

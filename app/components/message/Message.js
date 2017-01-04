@@ -1,13 +1,19 @@
 import React from 'react';
 // import {Link} from 'react-router';
+// import Actions from '../../actions/Actions';
 
 export default class Message extends React.Component {
+    static get contextTypes() {
+        return {
+            root: React.PropTypes.string            
+        };
+    }
+
     render() {
         const data = this.props.data;
         const mode = data.mode;
         const username = data.username || data.name; 
         const content = data.content;
-        
         return (
             <div>
             { mode === 'view' ?
@@ -24,7 +30,10 @@ export default class Message extends React.Component {
 							
 						<div className="input-group">
 							<span className="input-group-addon" id="basic-addon1">{username}</span>
-							<input type="text" className="form-control" id="name" placeholder="Name"/>
+							<input 
+                                type="text" className="form-control" 
+                                id="new-message" placeholder="Name"
+                                onKeyPress={this.sendMessage.bind(this)} />
 						</div>
                     
                     </div>
@@ -33,6 +42,17 @@ export default class Message extends React.Component {
             }
             </div>
         );
+    }
+
+    sendMessage(event) {
+        if (event.key === 'Enter') {
+            const data = {
+                content: event.target.value,
+                username: this.props.data.username
+            };
+            document.getElementById('new-message').value = '';
+            this.props.onNewMessage(data);
+        } 
     }
 
     calculateLink(data) {

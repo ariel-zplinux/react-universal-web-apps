@@ -4,6 +4,22 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import Consts from './Consts';
 
 export class Actions {
+    sendNewMessage(params) {
+        this.loadNewMessage(params).then( (response) => {
+            AppDispatcher.dispatch({
+                type: Consts.SEND_NEW_MESSAGE, 
+                data: response
+            });
+        }).catch((err) => {
+            throw new Error(err);
+        });
+    }
+
+    loadNewMessage(params, domain = '') {
+        const url = `${domain}/api/message/new`;
+        return axios.post(url, params);
+    }
+
     connectNewUser(params) {
         this.loadNewUserName(params).then( (response) => {
             AppDispatcher.dispatch({

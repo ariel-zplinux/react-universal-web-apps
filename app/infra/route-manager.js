@@ -89,8 +89,16 @@ const routeManager = Object.assign({}, baseManager, {
         this.createDataRoute(router);        
 
         this.createNewUserRoute(router);        
+        this.createNewMessageRoute(router);
 
         return router;
+    },
+
+    createNewMessageRoute(router) {
+        router.post('/message/new', (req, res) => {
+            const data = req.body;
+            res.json(data);                                    
+        });
     },
 
     createNewUserRoute(router) {
