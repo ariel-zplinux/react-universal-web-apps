@@ -3,11 +3,15 @@ import React from 'react';
 import List from '../common/List';
 import Footer from '../main/Footer';
 import Message from './Message';
-// import CompactBill from './CompactBill';
-// import CompactData from './CompactData';
 
-// import ReactPaginate from 'react-paginate';
 import Actions from '../../actions/Actions';
+
+import socketIOclient from 'socket.io-client'
+import {emitChatRoomSync} from '../../synchronization/SyncClient';
+
+// start socket.io client
+const io = socketIOclient('http://localhost:6001');
+emitChatRoomSync(io);
 
 export default class ChatRoom extends React.Component {
     static loadAction(params, req, domain) {

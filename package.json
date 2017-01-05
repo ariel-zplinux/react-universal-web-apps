@@ -66,6 +66,8 @@
     "express-handlebars": "^2.0.1",
     "morgan": "^1.6.1",
     "nconf": "^0.8.2",
-    "random-name": "^0.1.2"
+    "random-name": "^0.1.2",
+    "socket.io": "^1.7.2",
+    "socket.io-client": "^1.7.2"
   }
 }
