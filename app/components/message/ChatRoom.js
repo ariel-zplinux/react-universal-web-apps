@@ -6,8 +6,8 @@ import Message from './Message';
 
 import Actions from '../../actions/Actions';
 
-import socketIOclient from 'socket.io-client'
-import {emitChatRoomSync} from '../../synchronization/SyncClient';
+import socketIOclient from 'socket.io-client';
+import {emitChatRoomSync, emitNewMessageSent} from '../../synchronization/SyncClient';
 
 // start socket.io client
 const io = socketIOclient('http://localhost:6001');
@@ -86,12 +86,10 @@ export default class ChatRoom extends React.Component {
     }
 
     componentDidUpdate() {
-        // // update state after shouldComponentUpdate hook
-        // let params = {
-        //     limit: this.props.route.perPage,
-        //     offset: this.state.offset
-        // };
-        // Actions.getDataList(params, this.props.route.path);
+        // emit "new message sent" to the server
+        if (this.state.newMessageSent) {
+            emitNewMessageSent(io);
+        }
 
         // to auto scroll to last message
         const elem = document.getElementById('main');

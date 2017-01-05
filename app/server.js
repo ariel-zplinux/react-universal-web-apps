@@ -21,5 +21,5 @@ const server = app.listen(nconf.get('port'), () => {
 });
 
 // start socket.io server
-const io = socketIOserver.listen(server);
+export const io = socketIOserver.listen(server);
 io.sockets.on('connection', onConnectionSync);

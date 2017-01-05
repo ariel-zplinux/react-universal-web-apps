@@ -149,7 +149,7 @@ const routeManager = Object.assign({}, baseManager, {
     createNewUserRoute(router) {
         router.get('/user/new', (req, res) => {
             const data = { 
-                username: RandomName(),
+                username: RandomName.place(),
                 mode: 'new'
             }
             res.json(data);                                    

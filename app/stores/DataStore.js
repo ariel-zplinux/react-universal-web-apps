@@ -15,6 +15,7 @@ export default class DataStore extends BaseStore {
 
     addNewMessage(data) {
         latestData.messages.push(data);
+        latestData.newMessageSent = true;
     }
 
     getMessages() {
@@ -42,6 +43,7 @@ export default class DataStore extends BaseStore {
         case Consts.GET_MESSAGES:
             const state = this.getAll();
             state.messages = action.data.items;            
+            state.newMessageSent = false;
             this.setAll(state);
             this.emitChange();
             break;
