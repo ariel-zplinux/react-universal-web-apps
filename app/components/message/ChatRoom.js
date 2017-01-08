@@ -7,10 +7,10 @@ import Message from './Message';
 import Actions from '../../actions/Actions';
 
 import socketIOclient from 'socket.io-client';
-import {emitChatRoomSync, emitNewMessageSent} from '../../synchronization/SyncClient';
+import {SERVER_URL, emitChatRoomSync, emitNewMessageSent} from '../../synchronization/SyncClient';
 
 // start socket.io client
-const io = socketIOclient('http://localhost:6001');
+const io = socketIOclient(SERVER_URL);
 emitChatRoomSync(io);
 
 export default class ChatRoom extends React.Component {

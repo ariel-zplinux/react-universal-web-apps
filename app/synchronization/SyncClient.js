@@ -1,6 +1,8 @@
 // Functions to synchronize with the server through socket.io
-
 import Actions from '../actions/Actions';
+
+// to change in production with WAN url
+export const SERVER_URL = 'http://localhost:6001';
 
 export function emitChatRoomSync(io) {
     io.emit('message', 'hello world');
@@ -18,3 +20,4 @@ export function emitChatRoomSync(io) {
 export function emitNewMessageSent(io) {
     io.emit('new message sent');
 }
+
