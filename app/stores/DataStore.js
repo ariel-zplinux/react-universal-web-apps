@@ -18,6 +18,10 @@ export default class DataStore extends BaseStore {
         latestData.newMessageSent = true;
     }
 
+    updateUsername(data) {
+        latestData.username = data;
+    }
+
     getMessages() {
         return latestData.messages;
     }
@@ -38,6 +42,10 @@ export default class DataStore extends BaseStore {
             break;
         case Consts.SEND_NEW_MESSAGE:
             this.addNewMessage(action.data);
+            this.emitChange();
+            break;
+        case Consts.CHANGE_USERNAME:
+            this.updateUsername(action.data);
             this.emitChange();
             break;
         case Consts.GET_MESSAGES:

@@ -12,7 +12,10 @@ export default class Footer extends React.Component {
         const data = this.props.data;
         return (
             <footer id='footer'>
-                <Message data={data} onNewMessage={this.props.onNewMessage} />
+                <Message 
+                    data={data} 
+                    onNewMessage={this.props.onNewMessage}
+                    onChangeUsername={this.props.onChangeUsername} />
             </footer>
         );
     }

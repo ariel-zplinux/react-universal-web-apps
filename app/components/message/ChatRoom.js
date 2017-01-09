@@ -105,6 +105,10 @@ export default class ChatRoom extends React.Component {
         Actions.sendNewMessage(data);
     }
 
+    onChangeUsername(data) {
+        Actions.changeUsername(data);
+    }
+
     render() {
         let status = 'ready' || this.state.status;
         let items = this.state.messages;
@@ -120,7 +124,11 @@ export default class ChatRoom extends React.Component {
                         : 'Waiting to connect'
                     }               
                 </div>
-                <Footer data={data} onNewMessage={this.onNewMessage}/>
+                <Footer 
+                    data={data} 
+                    onNewMessage={this.onNewMessage}
+                    onChangeUsername={this.onChangeUsername} 
+                />
             </section>    
         );
     }

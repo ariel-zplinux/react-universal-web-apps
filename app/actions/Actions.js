@@ -5,6 +5,22 @@ import Consts from './Consts';
 
 export class Actions {
 
+    changeUsername(params) {
+        this.updateUsername(params).then( (response) => {
+            AppDispatcher.dispatch({
+                type: Consts.CHANGE_USERNAME, 
+                data: response.data
+            });
+        }).catch((err) => {
+            throw new Error(err);
+        });
+    }
+
+    updateUsername(params, domain = '') {
+        const url = `${domain}/api/user/update`;
+        return axios.put(url, params);
+    }
+
     getMessages(params) {
         this.loadMessages(params).then( (response) => {
             AppDispatcher.dispatch({

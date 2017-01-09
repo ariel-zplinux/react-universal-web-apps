@@ -25,19 +25,42 @@ export default class Message extends React.Component {
                     </div>
                 </article>
                 : 
-                <div className="panel panel-default">
-                    <div className="panel-body" id="status">
-							
-						<div className="input-group">
-							<span className="input-group-addon" id="basic-addon1">{username}</span>
-							<input 
-                                type="text" className="form-control" 
-                                id="new-message" placeholder="Name"
-                                onKeyPress={this.sendMessage.bind(this)} />
-						</div>
-                    
+
+                <div className="row">
+                    <div className="col-lg-3">
+                        <div className="input-group">
+                        <span className="input-group-btn">
+                            <button className="btn btn-warning" 
+                                type="button"
+                                id="btn-change-username"
+                                onClick={this.changeUsername.bind(this)}>
+                                Change
+                            </button>
+                        </span>
+                        <div id="tooltip"></div>
+                        <input type="text" className="form-control" 
+                            placeholder={username}
+                            onKeyPress={this.changeUsername.bind(this)} 
+                            id="change-username"
+                            />
+                        </div>
                     </div>
-                    <div id="control"></div>
+                    <div className="col-lg-9">
+                        <div className="input-group">
+                        <input type="text" className="form-control" placeholder="Message"
+                            onKeyPress={this.sendMessage.bind(this)} 
+                            id="new-message"
+                        />
+                        <span className="input-group-btn">
+                            <button className="btn btn-success"
+                                id="btn-send-message" 
+                                type="button" 
+                                onClick={this.sendMessage.bind(this)}>
+                                Send
+                            </button>
+                        </span>
+                        </div>
+                    </div>
                 </div>                
             }
             </div>
@@ -45,9 +68,10 @@ export default class Message extends React.Component {
     }
 
     sendMessage(event) {
-        if (event.key === 'Enter') {
+        if (event.key === 'Enter' || event.target.id === 'btn-send-message') {
+            const message = document.getElementById('new-message').value;
             const data = {
-                content: event.target.value,
+                content: message,
                 username: this.props.data.username
             };
             document.getElementById('new-message').value = '';
@@ -55,7 +79,14 @@ export default class Message extends React.Component {
         } 
     }
 
-    calculateLink(data) {
-        return data.link ? `${data.link}` : false;
+    changeUsername(event) {
+        if (event.key === 'Enter' || event.target.id === 'btn-change-username') {
+            const username = document.getElementById('change-username').value;
+            const data = {
+                name: username
+            };
+            document.getElementById('change-username').value = '';
+            this.props.onChangeUsername(data);
+        } 
     }
 }

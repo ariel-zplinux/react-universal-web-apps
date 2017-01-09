@@ -91,10 +91,44 @@ const routeManager = Object.assign({}, baseManager, {
         this.createDataRoute(router);        
 
         this.createNewUserRoute(router);        
+        this.createUpdateUserRoute(router);
         this.createNewMessageRoute(router);
         this.createGetMessagesRoute(router);
 
         return router;
+    },
+
+    createUpdateUserRoute(router){
+        router.put('/user/update', (req, res) => {
+            //retrieve post parameters
+            const user = req.body;
+            user.ip = req.connection.remoteAddress;
+            this.addUserToDb(user, (err, data) =>{
+                if(!err) {
+                    res.json(data);                                    
+                } else {
+                    res.status(500).send(err);
+                }
+            });
+        });
+    },
+    addUserToDb(user, callback) {
+        // const u = new User();
+        // u.name = user.name;
+        // u.ip = user.ip;
+        callback(null, user.name);
+        // m.save( (err) => {
+        //     if (err){
+        //         callback(err, null);
+        //     }
+        //     else {
+        //         const newUser = {
+        //             name: u.name,
+        //             id: u.id
+        //         }
+        //         callback(null, newUser);
+        //     }
+        // });
     },
 
     createGetMessagesRoute(router){

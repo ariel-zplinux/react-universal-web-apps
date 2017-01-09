@@ -1,9 +1,8 @@
 import mongoose from '../infra/db-manager';
 
 const userSchema = mongoose.Schema({
-    content: String,
-    username: String,
-    userId: String,
+    name: String,
+    ip: { type: String, default: "localhost" },
     date: { type: Date, default: Date.now }
 });
 const User = mongoose.model("User", userSchema);
