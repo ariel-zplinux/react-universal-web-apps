@@ -5,6 +5,22 @@ import Consts from './Consts';
 
 export class Actions {
 
+    disconnectUser(params) {
+        this.removeUser(params).then( (response) => {
+            AppDispatcher.dispatch({
+                type: Consts.DISCONNECT_USER, 
+                data: response.data
+            });
+        }).catch((err) => {
+            throw new Error(err);
+        });
+    }
+
+    removeUser(params, domain = '') {
+        const url = `${domain}/api/user/delete?id=` + params.id;
+        return axios.delete(url, params);
+    }
+
     changeUsername(params) {
         this.updateUsername(params).then( (response) => {
             AppDispatcher.dispatch({

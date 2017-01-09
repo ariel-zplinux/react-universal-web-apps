@@ -19,6 +19,7 @@ import ContextWrapper from '../components/common/ContextWrapper';
 import RandomName from 'random-name';
 
 import Message from '../models/Message';
+import User from '../models/User';
 
 const routeManager = Object.assign({}, baseManager, {
     configureDevelopmentEnv(app) {
@@ -92,18 +93,44 @@ const routeManager = Object.assign({}, baseManager, {
 
         this.createNewUserRoute(router);        
         this.createUpdateUserRoute(router);
+        this.createDeleteUserRoute(router);        
+
         this.createNewMessageRoute(router);
         this.createGetMessagesRoute(router);
 
         return router;
     },
 
+    createDeleteUserRoute(router) {
+        router.delete('/user/delete', (req, res) => {
+            const id = req.query.id;            
+            this.deleteUserDb(id, (err, data) =>{
+                if(!err) {
+                    res.json(data);                                 
+                } else {
+                    res.status(500).send(err);
+                }
+            });
+        });
+    },
+
+    deleteUserDb(id, callback) {
+        User.find({ _id: id }).remove( (err) => {
+            if (err){
+                console.log(err);
+                callback(err, null);
+            }
+            callback(null, true);
+        });
+    },
+
+
     createUpdateUserRoute(router){
         router.put('/user/update', (req, res) => {
-            //retrieve post parameters
+            //retrieve put parameters
             const user = req.body;
             user.ip = req.connection.remoteAddress;
-            this.addUserToDb(user, (err, data) =>{
+            this.updateUserDb(user, (err, data) =>{
                 if(!err) {
                     res.json(data);                                    
                 } else {
@@ -112,23 +139,17 @@ const routeManager = Object.assign({}, baseManager, {
             });
         });
     },
-    addUserToDb(user, callback) {
-        // const u = new User();
-        // u.name = user.name;
-        // u.ip = user.ip;
-        callback(null, user.name);
-        // m.save( (err) => {
-        //     if (err){
-        //         callback(err, null);
-        //     }
-        //     else {
-        //         const newUser = {
-        //             name: u.name,
-        //             id: u.id
-        //         }
-        //         callback(null, newUser);
-        //     }
-        // });
+    updateUserDb(user, callback) {
+        User.update(
+            { _id: user.id},
+            { $set: {name: user.name}},
+            (err) => {
+                if (err){
+                    callback(err, null);
+                }
+                callback(null, user.name);
+            }
+        );
     },
 
     createGetMessagesRoute(router){
@@ -182,13 +203,39 @@ const routeManager = Object.assign({}, baseManager, {
 
     createNewUserRoute(router) {
         router.get('/user/new', (req, res) => {
-            const data = { 
-                username: RandomName.place(),
-                mode: 'new'
+            const user = { 
+                name: RandomName.place(),
+                ip: req.connection.remoteAddress
             }
-            res.json(data);                                    
+            this.addUserDb(user, (err, data) =>{
+                if(!err) {
+                    res.json(data);                                 
+                } else {
+                    res.status(500).send(err);
+                }
+            });
+            // res.json(data);                                    
         });
     },
+
+    addUserDb(user, callback) {
+        const u = new User();
+        u.name = user.name;
+        u.ip = user.ip;
+
+        u.save( (err) => {
+            if (err){
+                callback(err, null);
+            }
+            const newUser = {
+                name: u.name,
+                id: u._id,
+                ip: u.ip
+            }
+            callback(null, newUser);
+        });
+    },
+    
 
     createClientsPerUserDeviceRoute(router) {
         router.get('/clients-per-user-device', (req, res) => {

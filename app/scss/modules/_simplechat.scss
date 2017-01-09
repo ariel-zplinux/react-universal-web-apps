@@ -43,6 +43,9 @@ ul{
 }
 
 #main {
+}
+
+#messageList {
     position: fixed;
     bottom: 120px;
     left: 15%;
@@ -50,6 +53,21 @@ ul{
     top: 100px;
 	overflow-y: auto;
   	background: rgba(0, 0, 0, 0.5);
+}
+
+#userList {
+    position: fixed;
+    bottom: 120px;
+    left: 85%;
+    right: 1%;
+    top: 100px;
+	overflow-y: auto;
+  	background: rgba(0, 0, 0, 0.5);	
+}
+
+.user {
+  	background: rgba(255, 255, 0, 0.5);	
+	color: 	  rgba(255, 255, 0, 0.5);	
 }
 #landingpage {
 	padding-right: 10px;

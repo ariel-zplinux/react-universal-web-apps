@@ -3,6 +3,7 @@ import React from 'react';
 import List from '../common/List';
 import Footer from '../main/Footer';
 import Message from './Message';
+import User from '../user/User';
 
 import Actions from '../../actions/Actions';
 
@@ -10,7 +11,7 @@ import socketIOclient from 'socket.io-client';
 import {SERVER_URL, emitChatRoomSync, emitNewMessageSent} from '../../synchronization/SyncClient';
 
 // start socket.io client
-const io = socketIOclient(SERVER_URL);
+export const io = socketIOclient(SERVER_URL);
 emitChatRoomSync(io);
 
 export default class ChatRoom extends React.Component {
@@ -41,13 +42,23 @@ export default class ChatRoom extends React.Component {
     }
 
     componentWillUnmount() {
+        window.removeEventListener('onbeforeunload');
         this.props.store.removeChangeListener(this.changeHandler);
     }
 
+    // disconnect and delete user when closing window
+    handleWindowClose(event) {
+        event.preventDefault();
+        const data = {
+            id: this.state.userId
+        };
+        Actions.disconnectUser(data);        
+    }
+
     componentDidMount() {
-        // Actions.getLatestBillsData(this.props.params);
-        // Actions.getClientsPerUserDeviceData(this.props.params);
-        // Actions.getDataList(this.props.params, this.props.route.path);
+        // disconnect and delete user when closing window
+        window.addEventListener('beforeunload', this.handleWindowClose.bind(this));        
+        
         Actions.connectNewUser(this.props.params);
         Actions.getMessages(this.props.params);
     }
@@ -56,27 +67,11 @@ export default class ChatRoom extends React.Component {
         let result = true;
 
 
+        // check if new messages
         if ((this.state.messages && this.state.messages.length) 
             !== (nextState.messagse && nextState.messages.length)) {
             result = true;
         }
-
-        // check if new messages
-
-        // if (this.state.messages && nextState.messages) {
-        //     const oldItems = this.state.items;
-        //     const newItems = nextState.items;
-
-        //     if (oldItems.length === newItems.length) {
-        //         const validList = newItems.filter((item, index) => {
-        //             return oldItems[index].name !== item.name;
-        //         });
-
-        //         if (validList.length === 0) {
-        //             result = false;
-        //         }
-        //     }
-        // }
 
         // check change of username 
         if (this.state.username !== nextState.username) {
@@ -92,7 +87,7 @@ export default class ChatRoom extends React.Component {
         }
 
         // to auto scroll to last message
-        const elem = document.getElementById('main');
+        const elem = document.getElementById('messageList');
         elem.scrollTop = elem.scrollHeight;
     }
 
@@ -106,30 +101,45 @@ export default class ChatRoom extends React.Component {
     }
 
     onChangeUsername(data) {
+        data.id = this.state.userId;
         Actions.changeUsername(data);
     }
 
     render() {
         let status = 'ready' || this.state.status;
-        let items = this.state.messages;
+        let messages = this.state.messages;
+        let users = [];
+        users.push({
+            name: this.state.username,
+            mode: 'view'
+        });
         const data = {
             username: this.state.username,
             mode: this.state.mode
         };
         return (
-            <section id="list">
-                <div className="container-fluid">
-                    { status === 'ready' ?
-                        <List items={items} itemType={Message}/>
-                        : 'Waiting to connect'
-                    }               
-                </div>
-                <Footer 
-                    data={data} 
-                    onNewMessage={this.onNewMessage}
-                    onChangeUsername={this.onChangeUsername} 
-                />
-            </section>    
+            <main role="main" id="main">
+
+                <section id="messageList">
+                    <div className="container-fluid">
+                        { status === 'ready' ?
+                            <List items={messages} itemType={Message}/>
+                            : 'Waiting to connect'
+                        }               
+                    </div>
+                    <Footer 
+                        data={data} 
+                        onNewMessage={this.onNewMessage}
+                        onChangeUsername={this.onChangeUsername.bind(this)} 
+                    />
+                </section>
+                <section id="userList">
+                        { status === 'ready' ?
+                            <List items={users} itemType={User}/>
+                            : 'Waiting to connect'
+                        }               
+                </section>
+            </main>
         );
     }
 }

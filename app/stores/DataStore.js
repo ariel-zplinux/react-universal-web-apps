@@ -31,13 +31,17 @@ export default class DataStore extends BaseStore {
     }
 
     handleAction(action) {
+        const state = this.getAll();
+
         switch (action.type) {
         case Consts.LOAD_DATALIST:
             this.setAll(action.data);
             this.emitChange();
             break;
         case Consts.CONNNECT_NEW_USER:
-            this.setAll(action.data);
+            state.username = action.data.name;
+            state.userId = action.data.id;
+            this.setAll(state);
             this.emitChange();
             break;
         case Consts.SEND_NEW_MESSAGE:
@@ -49,7 +53,6 @@ export default class DataStore extends BaseStore {
             this.emitChange();
             break;
         case Consts.GET_MESSAGES:
-            const state = this.getAll();
             state.messages = action.data.items;            
             state.newMessageSent = false;
             this.setAll(state);
