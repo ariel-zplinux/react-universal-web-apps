@@ -46,7 +46,7 @@ export default class ChatRoom extends React.Component {
     }
 
     componentWillUnmount() {
-        window.removeEventListener('onbeforeunload');
+        window.removeEventListener('beforeunload');
         this.props.store.removeChangeListener(this.changeHandler);
     }
 
@@ -58,6 +58,7 @@ export default class ChatRoom extends React.Component {
         };
         Actions.disconnectUser(data);        
         emitUserDisconnected(io);
+        return true;        
     }
 
     componentDidMount() {
