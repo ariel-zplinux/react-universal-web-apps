@@ -1,6 +1,6 @@
 # Simple chat with MERN stack
 
-A basic chat application that allow:
+A basic chat application that allows:
 
 - to send and read messages
 - to see connected users
@@ -30,14 +30,13 @@ Quick Start
 
 
 ```shell
-$ git clone https://github.com/ariel-zplinux/data-extractor-mern.git
-$ cd data-extractor-mern
-$ git checkout simplechat
+$ git clone https://github.com/ariel-zplinux/simple-chat.git
+$ cd simplechat
 $ npm install
 $ npm start
 ```
 
-ps: you probably want to change SERVER_URL in app/synchronisation/SyncClient.js
+ps: you should change SERVER_URL in app/synchronisation/SyncClient.js to your WAN or LAN address.
 
 NPM Commands
 ------------
@@ -56,9 +55,9 @@ API endpoints
 |GET|/api/messages||Get messages|
 |POST|/api/message/new|content, username|Add a new message|
 |GET|/api/users||Get users|
-|GET|/api/user/new||Connect a new User (and generate a name)|
-|PUT|/api/user/update|name, id|Update a user (name)|
-|DELETE|/api/user/delete/:id|id|Disconnect (and delete) a user|
+|GET|/api/user/new||Connect a new user and generate a name|
+|PUT|/api/user/update|name, id|Change username|
+|DELETE|/api/user/delete/:id|id|Disconnect and delete a user|
 
 Links
 -----
