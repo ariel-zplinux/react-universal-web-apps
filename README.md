@@ -1,49 +1,43 @@
-# Test project with MERN stack
+# Simple chat with MERN stack
 
-A basic application that extracts and aggregates data, then display it.
+A basic chat application that allow:
 
-Using Mongo Express React and Nodejs.
+- to send and read messages
+- to see connected users
+
+Using Mongo Express React, Nodejs, Flux and Socket.io.
 
 Stack
 -----
 
 - Nodejs (>= v6)
+- Socket.io
 - Nvm
 - Express
 - React
 - Flux
 - Mongodb
 - React Router
-- React Markdown
-- React Paginate
 - Axios 
 - Mongoose
 - Babel
 - Webpack
 - Gulp
-- Docker
-- Docker-compose
+- Random-name
 
 Quick Start
 -----------
 
+
 ```shell
 $ git clone https://github.com/ariel-zplinux/data-extractor-mern.git
 $ cd data-extractor-mern
+$ git checkout simplechat
 $ npm install
-$ npm run prepare && npm start
+$ npm start
 ```
 
-Or with Docker and Docker-compose (after changing dbURI from 'localhost' to 'mongo' in app/infra/db-manager.js)
-
-Rem: it works, but there is a blocking bug, not resolved yet, regarding clients per user agent pagination.
-```shell
-$ git clone https://github.com/ariel-zplinux/data-extractor-mern.git
-$ cd data-extractor-mern
-$ docker-compose build
-$ docker-compose up
-```
-
+ps: you probably want to change SERVER_URL in app/synchronisation/SyncClient.js
 
 NPM Commands
 ------------
@@ -51,7 +45,7 @@ NPM Commands
 |Command|Description|
 |---|---|
 |npm start|Start server @**localhost:6001**| 
-|npm run prepare|Prepare data|
+|npm install|Install dependencies |
 
 API endpoints
 -------------
@@ -59,11 +53,12 @@ API endpoints
 
 |HTTP Method|Url|Parameters|Description|
 |---|---|---|---|
-|GET|/api/menu||Get menu|
-|GET|/api/clients-per-user-device||Get clients per user device|
-|GET|/api/clients-per-user-agent| offset, limit|Get clients per user agent|
-|GET|/api/duration-per-user-device||Get duration per user device|
-|GET|/api/data/:id||Get detailed data|
+|GET|/api/messages||Get messages|
+|POST|/api/message/new|content, username|Add a new message|
+|GET|/api/users||Get users|
+|GET|/api/user/new||Connect a new User (and generate a name)|
+|PUT|/api/user/update|name, id|Update a user (name)|
+|DELETE|/api/user/delete/:id|id|Disconnect (and delete) a user|
 
 Links
 -----
@@ -71,5 +66,5 @@ Links
 - Server side rendering - [https://www.smashingmagazine.com/2016/03/server-side-rendering-react-node-express/](https://www.smashingmagazine.com/2016/03/server-side-rendering-react-node-express/)
 - MERN boilerplate - [https://github.com/zen-js-code/react-universal-web-apps/](https://github.com/zen-js-code/react-universal-web-apps/)
 - Readme inspiration - [https://github.com/r-park/soundcloud-redux](https://github.com/r-park/soundcloud-redux)
-- React markdown - [https://github.com/rexxars/react-markdown](https://github.com/rexxars/react-markdown)
-- React paginate - [https://github.com/AdeleD/react-paginate](https://github.com/AdeleD/react-paginate)
+- Flux tutorial - [http://blog.andrewray.me/flux-for-stupid-people/](http://blog.andrewray.me/flux-for-stupid-people/)
+- Socket.io tutorial - [https://openclassrooms.com/courses/ultra-fast-applications-using-node-js/socket-io-let-s-go-to-real-time](https://openclassrooms.com/courses/ultra-fast-applications-using-node-js/socket-io-let-s-go-to-real-time)

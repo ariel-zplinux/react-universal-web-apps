@@ -1,11 +1,11 @@
 {
-  "name": "react-ssr-example",
+  "name": "simple-chat",
   "version": "0.0.1",
-  "description": "Test project with MERN stack.",
+  "description": "Simple chat application with MERN stack.",
   "main": "app/server.js",
   "repository": {
     "type": "git",
-    "url": "git+https://ariel-zplinux@bitbucket.org/ariel-zplinux/react-universal-webapp-fork.git"
+    "url": "https://github.com/ariel-zplinux/simple-chat.git"
   },
   "keywords": [
     "ssr",
@@ -15,13 +15,11 @@
   ],
   "author": "Ariel Biton",
   "license": "MIT",
-  "homepage": "https://bitbucket.org/ariel-zplinux/react-universal-webapp-fork/",
+  "homepage": "https://github.com/ariel-zplinux/simple-chat",
   "scripts": {
     "gulp": "gulp",
     "debug": "node-dev --debug app/babel-server.js",
     "server": "node-dev app/babel-server.js",
-    "prepare": "node-dev app/server-prepare.js",
-    "test": "node-dev app/test.js",
     "start": "npm-run-all --parallel gulp server",
     "start:debug": "npm-run-all --parallel gulp debug"
   },
@@ -71,3 +69,4 @@
     "socket.io-client": "^1.7.2"
   }
 }
+

@@ -20,17 +20,7 @@ emitChatRoomSync(io);
 
 export default class ChatRoom extends React.Component {
     static loadAction(params, req, domain) {
-        // to have menu displayed when root address called
-        params.url = (req === '/') ? '/menu' : req;
-        // Actions.loadData(params, domain);
         return Actions.loadMessages(params, domain);
-    }
-
-
-    handlePageClick(data) {
-        let selected = data.selected;
-        let offset = Math.ceil(selected * this.props.route.perPage);
-        this.setState({offset});
     }
 
     constructor(props) {
@@ -56,7 +46,8 @@ export default class ChatRoom extends React.Component {
         const data = {
             id: this.state.userId
         };
-        Actions.disconnectUser(data);        
+        Actions.disconnectUser(data);
+        // warn server that client got disconnected
         emitUserDisconnected(io);
         return true;        
     }
@@ -72,7 +63,6 @@ export default class ChatRoom extends React.Component {
     shouldComponentUpdate(nextProps, nextState) {
         let result = true;
 
-
         // check if new messages
         if ((this.state.messages && this.state.messages.length) 
             !== (nextState.messagse && nextState.messages.length)) {
@@ -87,11 +77,12 @@ export default class ChatRoom extends React.Component {
     }
 
     componentDidUpdate() {
-        // emit "new message sent" to the server
+        // warn the server that a new message has been sent
         if (this.state.newMessageSent) {
             emitNewMessageSent(io);
         }
 
+        // warn the server that the client got connected or changed his username
         if (this.state.newUserAdded) {
             emitNewUserAdded(io);
             Actions.getUsers();

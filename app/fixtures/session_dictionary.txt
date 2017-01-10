@@ -1,1 +1,0 @@
-id_visitor|id_session|dim_session_number|dim_user_agent|dim_device_app_combo|ds|ts_min|ts_max|did_search|sent_message|sent_booking_request
