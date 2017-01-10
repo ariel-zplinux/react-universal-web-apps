@@ -1,40 +1,70 @@
-# React SSR Example Application
+# Simple chat with MERN stack
 
-The application contains several variants, **each in its separate branch**, progressively demonstrating various paradigms for writing [universal](https://medium.com/@mjackson/universal-javascript-4761051b7ae9) JavaScript with [React](https://facebook.github.io/react/), [React Router](https://github.com/rackt/react-router), [Node](https://nodejs.org/en/) and [Express](http://expressjs.com/).
+A basic chat application that allow:
 
-Enjoy.
+- to send and read messages
+- to see connected users
 
-## Simple Application
+Using Mongo Express React, Nodejs, Flux and Socket.io.
 
-> The application is under [simple](https://github.com/zen-js-code/react-universal-web-apps/tree/simple) branch.
+Stack
+-----
 
-The basis for the entire application stack, this application starts (and ends) with client-side React, with no handling of rendering on the server. The data is not retrieved, rather fed via props from the top level route.
+- Nodejs (>= v6)
+- Socket.io
+- Nvm
+- Express
+- React
+- Flux
+- Mongodb
+- React Router
+- Axios 
+- Mongoose
+- Babel
+- Webpack
+- Gulp
+- Random-name
 
-## Naive Universal Application
+Quick Start
+-----------
 
-> The application is under [simple+ssr](https://github.com/zen-js-code/react-universal-web-apps/tree/simple+ssr) branch.
 
-This version of the application performs the following:
+```shell
+$ git clone https://github.com/ariel-zplinux/data-extractor-mern.git
+$ cd data-extractor-mern
+$ git checkout simplechat
+$ npm install
+$ npm start
+```
 
-1. render HTML on server, based on data necessary
-2. deliver the HTML to the browser
-3. send the data , used to render the HTML, to the browser as well
-4. allow React to resolve the necessary re-renders
+ps: you probably want to change SERVER_URL in app/synchronisation/SyncClient.js
 
-### A Little Less Naive Universal Application
+NPM Commands
+------------
 
-> The application is under [simple+ssr+context](https://github.com/zen-js-code/react-universal-web-apps/tree/simple+ssr+context) branch.
+|Command|Description|
+|---|---|
+|npm start|Start server @**localhost:6001**| 
+|npm install|Install dependencies |
 
-This application improves on the previous variant by abstracting data propagation and delegating it to React Context. This is achieved by introducing a new wrapper component that does most of the "heavy" lifting required for Context usage in React components.
+API endpoints
+-------------
 
-### More Complex, But Still Naive, Application
 
-> The application is under [simple+ssr+context+promise](https://github.com/zen-js-code/react-universal-web-apps/tree/simple+ssr+context+promises) branch.
+|HTTP Method|Url|Parameters|Description|
+|---|---|---|---|
+|GET|/api/messages||Get messages|
+|POST|/api/message/new|content, username|Add a new message|
+|GET|/api/users||Get users|
+|GET|/api/user/new||Connect a new User (and generate a name)|
+|PUT|/api/user/update|name, id|Update a user (name)|
+|DELETE|/api/user/delete/:id|id|Disconnect (and delete) a user|
 
-This application expands the previous by adding another page and delegating data retrieval to static methods on the components themselve (limited to Route components).
+Links
+-----
 
-### Flux Universal Application
-
-> The application is under [flux+ssr+context+promise](https://github.com/zen-js-code/react-universal-web-apps/tree/flux+ssr+context+promises) branch.
-
-This variant of the application makes the transformation from our naive Flux-less application to still (hopefully less) somewhat naive Flux-full one.
+- Server side rendering - [https://www.smashingmagazine.com/2016/03/server-side-rendering-react-node-express/](https://www.smashingmagazine.com/2016/03/server-side-rendering-react-node-express/)
+- MERN boilerplate - [https://github.com/zen-js-code/react-universal-web-apps/](https://github.com/zen-js-code/react-universal-web-apps/)
+- Readme inspiration - [https://github.com/r-park/soundcloud-redux](https://github.com/r-park/soundcloud-redux)
+- Flux tutorial - [http://blog.andrewray.me/flux-for-stupid-people/](http://blog.andrewray.me/flux-for-stupid-people/)
+- Socket.io tutorial - [https://openclassrooms.com/courses/ultra-fast-applications-using-node-js/socket-io-let-s-go-to-real-time](https://openclassrooms.com/courses/ultra-fast-applications-using-node-js/socket-io-let-s-go-to-real-time)
