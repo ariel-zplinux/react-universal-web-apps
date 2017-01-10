@@ -11,7 +11,8 @@ import socketIOclient from 'socket.io-client';
 import {SERVER_URL, 
     emitChatRoomSync, 
     emitNewMessageSent, 
-    emitNewUserAdded} from '../../synchronization/SyncClient';
+    emitNewUserAdded,
+    emitUserDisconnected} from '../../synchronization/SyncClient';
 
 // start socket.io client
 export const io = socketIOclient(SERVER_URL);
@@ -56,6 +57,7 @@ export default class ChatRoom extends React.Component {
             id: this.state.userId
         };
         Actions.disconnectUser(data);        
+        emitUserDisconnected(io);
     }
 
     componentDidMount() {

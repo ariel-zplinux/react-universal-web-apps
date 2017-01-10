@@ -6,6 +6,10 @@ export function onConnectionSync(socket) {
         socket.broadcast.emit('new message added', 'Message to all units. I repeat, message to all units.');
     });
     socket.on('new user connected', () => {
-        socket.broadcast.emit('new user added', 'Message to all units. I repeat, message to all units.');
+        socket.broadcast.emit('user list to update', 'Message to all units. I repeat, message to all units.');
     });
+    socket.on('user disconnected', () => {
+        socket.broadcast.emit('user list to update', 'Message to all units. I repeat, message to all units.');
+    });
+
 }

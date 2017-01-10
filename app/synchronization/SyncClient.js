@@ -14,8 +14,8 @@ export function emitChatRoomSync(io) {
             Actions.getMessages();
         }
     });
-    io.on('new user added', () => {
-        console.log('===== client - on new user added');        
+    io.on('user list to update', () => {
+        console.log('===== client - user list to update');        
         // to prevent a warning probably due to browsersync or ssr getting broadcast signal
         // it checks that we are in the client
         if (typeof window !== 'undefined') {
@@ -31,5 +31,9 @@ export function emitNewMessageSent(io) {
 
 export function emitNewUserAdded(io) {
     io.emit('new user connected');
+}
+
+export function emitUserDisconnected(io) {
+    io.emit('user disconnected');
 }
 
