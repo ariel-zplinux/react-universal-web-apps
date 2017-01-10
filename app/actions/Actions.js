@@ -5,6 +5,22 @@ import Consts from './Consts';
 
 export class Actions {
 
+    getUsers(params) {
+        this.loadUsers(params).then( (response) => {
+            AppDispatcher.dispatch({
+                type: Consts.GET_USERS, 
+                data: response.data
+            });
+        }).catch((err) => {
+            throw new Error(err);
+        });
+    }
+
+    loadUsers(params, domain = '') {
+        const url = `${domain}/api/users`;
+        return axios.get(url);
+    }
+
     disconnectUser(params) {
         this.removeUser(params).then( (response) => {
             AppDispatcher.dispatch({

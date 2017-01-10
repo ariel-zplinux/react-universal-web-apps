@@ -41,6 +41,7 @@ export default class DataStore extends BaseStore {
         case Consts.CONNNECT_NEW_USER:
             state.username = action.data.name;
             state.userId = action.data.id;
+            state.newUserAdded = true;
             this.setAll(state);
             this.emitChange();
             break;
@@ -49,12 +50,20 @@ export default class DataStore extends BaseStore {
             this.emitChange();
             break;
         case Consts.CHANGE_USERNAME:
-            this.updateUsername(action.data);
+            state.newUserAdded = true;
+            state.username = action.data;
+            // this.updateUsername(action.data);
             this.emitChange();
             break;
         case Consts.GET_MESSAGES:
             state.messages = action.data.items;            
             state.newMessageSent = false;
+            this.setAll(state);
+            this.emitChange();
+            break;
+        case Consts.GET_USERS:
+            state.users = action.data.items;            
+            state.newUserAdded = false;
             this.setAll(state);
             this.emitChange();
             break;

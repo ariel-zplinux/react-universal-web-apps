@@ -8,7 +8,10 @@ import User from '../user/User';
 import Actions from '../../actions/Actions';
 
 import socketIOclient from 'socket.io-client';
-import {SERVER_URL, emitChatRoomSync, emitNewMessageSent} from '../../synchronization/SyncClient';
+import {SERVER_URL, 
+    emitChatRoomSync, 
+    emitNewMessageSent, 
+    emitNewUserAdded} from '../../synchronization/SyncClient';
 
 // start socket.io client
 export const io = socketIOclient(SERVER_URL);
@@ -86,6 +89,11 @@ export default class ChatRoom extends React.Component {
             emitNewMessageSent(io);
         }
 
+        if (this.state.newUserAdded) {
+            emitNewUserAdded(io);
+            Actions.getUsers();
+        }
+
         // to auto scroll to last message
         const elem = document.getElementById('messageList');
         elem.scrollTop = elem.scrollHeight;
@@ -108,11 +116,7 @@ export default class ChatRoom extends React.Component {
     render() {
         let status = 'ready' || this.state.status;
         let messages = this.state.messages;
-        let users = [];
-        users.push({
-            name: this.state.username,
-            mode: 'view'
-        });
+        let users = this.state.users;
         const data = {
             username: this.state.username,
             mode: this.state.mode

@@ -93,7 +93,8 @@ const routeManager = Object.assign({}, baseManager, {
 
         this.createNewUserRoute(router);        
         this.createUpdateUserRoute(router);
-        this.createDeleteUserRoute(router);        
+        this.createDeleteUserRoute(router);
+        this.createGetUsersRoute(router)
 
         this.createNewMessageRoute(router);
         this.createGetMessagesRoute(router);
@@ -101,9 +102,33 @@ const routeManager = Object.assign({}, baseManager, {
         return router;
     },
 
+    
+    // API User
+
+    createGetUsersRoute(router){
+        router.get('/users', (req, res) => {
+            this.retrieveUsers((err, data) => {
+                if(!err) {
+                    res.json(data);                                    
+                } else {
+                    res.status(500).send(err);
+                }
+            });
+        });
+    },
+    retrieveUsers(callback){
+        User.find({})
+            .select({_id: 1, name: 1})
+            .sort({'date': -1}).limit(50).exec().then( (doc, err) => {
+            callback(err, {items: doc.reverse()}); 
+        });  
+    },
+
     createDeleteUserRoute(router) {
         router.delete('/user/delete', (req, res) => {
-            const id = req.query.id;            
+            const id = req.query.id;
+            console.log('== user disconnected - id: ' + id);
+                        
             this.deleteUserDb(id, (err, data) =>{
                 if(!err) {
                     res.json(data);                                 
@@ -129,6 +154,9 @@ const routeManager = Object.assign({}, baseManager, {
         router.put('/user/update', (req, res) => {
             //retrieve put parameters
             const user = req.body;
+            console.log('== username updated');
+            console.log(user);
+
             user.ip = req.connection.remoteAddress;
             this.updateUserDb(user, (err, data) =>{
                 if(!err) {
@@ -152,6 +180,46 @@ const routeManager = Object.assign({}, baseManager, {
         );
     },
 
+    createNewUserRoute(router) {
+        router.get('/user/new', (req, res) => {
+            const user = { 
+                name: RandomName.place(),
+                ip: req.connection.remoteAddress,
+                date: Date()
+            }
+            console.log('== new user connected');
+            console.log(user);
+            this.addUserDb(user, (err, data) =>{
+                if(!err) {
+                    res.json(data);                                 
+                } else {
+                    res.status(500).send(err);
+                }
+            });
+            // res.json(data);                                    
+        });
+    },
+
+    addUserDb(user, callback) {
+        const u = new User();
+        u.name = user.name;
+        u.ip = user.ip;
+
+        u.save( (err) => {
+            if (err){
+                callback(err, null);
+            }
+            const newUser = {
+                name: u.name,
+                id: u._id,
+                ip: u.ip
+            }
+            callback(null, newUser);
+        });
+    },
+    
+    // API Message
+
     createGetMessagesRoute(router){
         router.get('/messages', (req, res) => {
             this.retrieveMessages((err, data) => {
@@ -168,6 +236,7 @@ const routeManager = Object.assign({}, baseManager, {
             callback(err, {items: doc.reverse()}); 
         });  
     },
+
     createNewMessageRoute(router) {
         router.post('/message/new', (req, res) => {
             //retrieve post parameters
@@ -200,42 +269,6 @@ const routeManager = Object.assign({}, baseManager, {
             }
         });
     },  
-
-    createNewUserRoute(router) {
-        router.get('/user/new', (req, res) => {
-            const user = { 
-                name: RandomName.place(),
-                ip: req.connection.remoteAddress
-            }
-            this.addUserDb(user, (err, data) =>{
-                if(!err) {
-                    res.json(data);                                 
-                } else {
-                    res.status(500).send(err);
-                }
-            });
-            // res.json(data);                                    
-        });
-    },
-
-    addUserDb(user, callback) {
-        const u = new User();
-        u.name = user.name;
-        u.ip = user.ip;
-
-        u.save( (err) => {
-            if (err){
-                callback(err, null);
-            }
-            const newUser = {
-                name: u.name,
-                id: u._id,
-                ip: u.ip
-            }
-            callback(null, newUser);
-        });
-    },
-    
 
     createClientsPerUserDeviceRoute(router) {
         router.get('/clients-per-user-device', (req, res) => {
