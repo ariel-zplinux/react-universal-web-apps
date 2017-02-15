@@ -258,7 +258,7 @@ const routeManager = Object.assign({}, baseManager, {
                 const newMessage = {
                     content: m.content,
                     username: m.username,
-                    id: m.id
+                    _id: m.id
                 }
                 callback(null, newMessage);
             }
