@@ -4,6 +4,7 @@ const messageSchema = mongoose.Schema({
     content: String,
     username: String,
     userId: String,
+    chatroomId: String,
     date: { type: Date, default: Date.now }
 });
 const Message = mongoose.model("Message", messageSchema);

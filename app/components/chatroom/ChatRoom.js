@@ -2,7 +2,7 @@ import React from 'react';
 
 import List from '../common/List';
 import Footer from '../main/Footer';
-import Message from './Message';
+import Message from '../message/Message';
 import User from '../user/User';
 
 import Actions from '../../actions/Actions';

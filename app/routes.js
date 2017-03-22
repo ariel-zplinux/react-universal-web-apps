@@ -6,13 +6,9 @@ import NoMatch from './components/common/NoMatch';
 
 import Dashboard from './components/dashboard/Dashboard';
 
-import ChatRoom from './components/message/ChatRoom';
-
-// import DataList from './components/data/DataList';
-// import DetailedData from './components/data/DetailedData';
+import ChatRoom from './components/chatroom/ChatRoom';
 
 import DataStore from './stores/DataStore';
-// import DetailedDataStore from './stores/DetailedDataStore';
 
 import ComponentConnectorFactory from './components/common/ComponentConnectorFactory';
 
@@ -21,12 +17,6 @@ const ChatRoomConnector = ComponentConnectorFactory.connect({
     component: ChatRoom,
     store: DataStore
 });
-
-// const DetailedDataConnector = ComponentConnectorFactory.connect({
-//     name: 'DetailedDataConnector',
-//     component: DetailedData,
-//     store: DetailedDataStore
-// });
 
 export default (
     <Route path="/" component={App}>
