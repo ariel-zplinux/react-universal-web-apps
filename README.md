@@ -10,11 +10,11 @@ Using Mongo Express React, Nodejs, Flux and Socket.io.
 Stack
 -----
 
-- Nodejs (>= v6)
+- Nodejs (>= v6) (EDIT 2020: OK with v10)
 - Socket.io
 - Nvm
 - Express
-- React
+- React (EDIT 2020: OK with v15)
 - Flux
 - Mongodb
 - React Router
